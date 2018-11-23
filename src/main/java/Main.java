@@ -50,9 +50,13 @@ public class Main {
                 new Atom<>(relT, "a", "c")
         );
 
+        long startTime = System.currentTimeMillis();
         List<Map<String, Integer>> res = joiner.run(new NestedLoopJoin());
+        long endTime = System.currentTimeMillis();
 
-        System.out.println(res);
+        System.out.println("Nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
+        System.out.println("Nested loop result: \n\t" + res);
+
     }
 
 }
