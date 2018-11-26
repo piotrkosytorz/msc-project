@@ -1,4 +1,5 @@
 import algorithms.Atom;
+import algorithms.lftj.LeapFrogTrieJoin;
 import algorithms.nestedloop.NestedLoopJoin;
 import joiner.Joiner;
 import joiner.datastructures.Relation;
@@ -50,13 +51,32 @@ public class Main {
                 new Atom<>(relT, "a", "c")
         );
 
-        long startTime = System.currentTimeMillis();
-        List<Map<String, Integer>> res = joiner.run(new NestedLoopJoin());
-        long endTime = System.currentTimeMillis();
+        List<Map<String, Integer>> res;
+        long startTime;
+        long endTime;
 
-        System.out.println("Nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
-        System.out.println("Nested loop result: \n\t" + res);
+        try {
+            startTime = System.currentTimeMillis();
+            res = joiner.run(new NestedLoopJoin());
+            endTime = System.currentTimeMillis();
+            System.out.println("Nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
+            System.out.println("Nested loop result: \n\t" + res);
+        } catch (Exception e) {
+            System.out.println("Nested loop fail!!!!: \n\t" + e.getLocalizedMessage());
+        }
 
+        System.out.println("\n======================================\n");
+
+        try {
+            startTime = System.currentTimeMillis();
+            res = joiner.run(new LeapFrogTrieJoin());
+            endTime = System.currentTimeMillis();
+
+            System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");
+            System.out.println("LFTJ result: \n\t" + res);
+        } catch (Exception e) {
+            System.out.println("LFTJ fail!!!!: \n\t" + e.getLocalizedMessage());
+        }
     }
 
 }

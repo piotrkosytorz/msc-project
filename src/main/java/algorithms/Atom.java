@@ -1,10 +1,12 @@
 package algorithms;
 
+import algorithms.lftj.datastructures.TrieBasedRelation;
 import joiner.datastructures.Relation;
 
-public class Atom<T> {
+public final class Atom<T> {
 
     private final Relation<T> relation;
+    private TrieBasedRelation<T> trieBasedRelation;
     private final String[] variables;
 
     public Atom(Relation<T> relation, String... variables) {
@@ -18,5 +20,11 @@ public class Atom<T> {
 
     public String[] getVariables() {
         return variables;
+    }
+
+    public TrieBasedRelation getTrieBasedRelation() {
+        if (trieBasedRelation == null)
+            trieBasedRelation = new TrieBasedRelation<>(this.relation);
+        return trieBasedRelation;
     }
 }

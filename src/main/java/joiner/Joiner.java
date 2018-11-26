@@ -15,7 +15,7 @@ public class Joiner<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Map<String, T>> run(Algorithm algorithm) {
+    public List<Map<String, T>> run(Algorithm algorithm) throws Exception {
         algorithm.prepareQuery(this.atoms);
         return algorithm.run();
     }

@@ -20,5 +20,5 @@ public interface Algorithm<T> {
      *
      * @return
      */
-    List<Map<String, T>> run();
+    List<Map<String, T>> run() throws Exception;
 }
