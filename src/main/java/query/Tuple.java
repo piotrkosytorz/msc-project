@@ -1,9 +1,16 @@
-package joiner.datastructures;
+package query;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
+/**
+ * class Tuple
+ *
+ * Tuple is an ordered set of basic elements.
+ *
+ * @param <T>
+ */
 public class Tuple<T> {
     private final List<T> elements;
 

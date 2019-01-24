@@ -1,15 +1,23 @@
 package algorithms.nestedloop;
 
 import algorithms.Algorithm;
-import algorithms.Atom;
+import query.Atom;
 import com.sun.tools.javac.util.Pair;
-import joiner.datastructures.Relation;
-import joiner.datastructures.Tuple;
+import query.Query;
+import query.Relation;
+import query.Tuple;
 
 import java.util.*;
 
+/**
+ * class NestedLoopJoin
+ *
+ * Nested loop join implementation according to the Algorithm interface.
+ * The result is a list of join results, where a join result is a list of pairs [matched variable name => value]
+ *
+ * @param <T>
+ */
 public class NestedLoopJoin<T> implements Algorithm<T> {
-
 
     private Relation[] relations;
     private HashMap<String, List<Pair<Relation, Integer>>> relationsEqualityMap = new HashMap<>();
@@ -17,14 +25,14 @@ public class NestedLoopJoin<T> implements Algorithm<T> {
     private List<Map<String, T>> cumulativeResult;
 
     @Override
-    public void prepareQuery(Atom[] atoms) {
+    public void prepareQuery(Query query) {
 
         cumulativeResult = new ArrayList<>();
 
         // prepare iterators and the condition tester
         Set<Relation> rSet = new HashSet<>();
 
-        for (Atom atom : atoms) {
+        for (Atom atom : query.getAtoms()) {
 
             // input data extraction: list of relations with their iterators
             rSet.add(atom.getRelation());
@@ -53,6 +61,12 @@ public class NestedLoopJoin<T> implements Algorithm<T> {
         }
     }
 
+    /**
+     * The main - recursive join - method (nested loop)
+     *
+     * @param list
+     * @param depth
+     */
     private void nestedLoop(Relation[] list, int depth) {
 
         for (Object tuple : list[depth].toArray()) {
@@ -80,7 +94,6 @@ public class NestedLoopJoin<T> implements Algorithm<T> {
         for (Map.Entry<String, List<Pair<Relation, Integer>>> variableConditions : conditionList.entrySet()) {
 
             // Checking conditions for variable variableConditions.getKey()
-
             T actualValue = null;
 
             for (Pair conditionPair : variableConditions.getValue()) {

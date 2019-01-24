@@ -1,6 +1,6 @@
-package algorithms.lftj.modules;
+package algorithms.lftj0.modules.old;
 
-import algorithms.lftj.datastructures.Trie;
+import algorithms.lftj.datasctructures.Trie.Trie;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,14 +29,15 @@ public class LFTrieBasedRelationIterator<T extends Comparable> implements Compar
      * Proceeds to the next key
      */
     void next() throws Exception {
-        if (!atEnd()) {
-            int index = indexStack.pop();
-            indexStack.push(index + 1);
-            this.currentNode = this.currentNode.getNextSibling(index);
-        } else {
+
+        if (atEnd()) {
             return;
-            //throw new Exception("There are no more siblings for current node.");
         }
+
+        int index = indexStack.pop();
+        indexStack.push(index + 1);
+        this.currentNode = this.currentNode.getNextSibling(index);
+
     }
 
     /**

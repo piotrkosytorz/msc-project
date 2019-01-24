@@ -1,10 +1,17 @@
-package joiner.datastructures;
+package query;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * class Relation
+ *
+ * A relation is an ordered list of tuples of the same arity and type of the (basic) element.
+ *
+ * @param <T>
+ */
 public class Relation<T> implements Iterable<T> {
 
     private Set<T> container;
@@ -17,11 +24,9 @@ public class Relation<T> implements Iterable<T> {
 
     @SuppressWarnings("unchecked")
     public void add(Tuple<T> tuple) throws Exception {
-
         if (tuple.size() != this.arity) {
             throw new Exception("Tuple size mismatch for relation arity.");
         }
-
         this.container.add((T) tuple);
     }
 

@@ -1,4 +1,4 @@
-package algorithms.lftj.datastructures;
+package algorithms.lftj.datasctructures.Trie;
 
 import java.util.ArrayList;
 import java.util.List;

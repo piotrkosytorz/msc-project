@@ -1,7 +1,7 @@
-package algorithms.lftj.modules;
+package algorithms.lftj0.modules.old;
 
-import algorithms.Atom;
-import algorithms.lftj.datastructures.TrieBasedRelation;
+import query.Atom;
+import algorithms.lftj.datasctructures.Trie.TrieBasedRelation;
 
 import java.util.*;
 
@@ -27,12 +27,16 @@ public class LeapFrogTrieJoin<T extends Comparable> {
         HashMap<String, List<TrieBasedRelation>> buckets = new HashMap<>();
         // Determine variables ordering
         for (Atom atom : atoms) {
+
+            // convert to trie-based relation per atom:
+            TrieBasedRelation atomTrieBasedRelation = new TrieBasedRelation<>(atom.getRelation());
+
             for (String variableName : atom.getVariables()) {
                 if (buckets.containsKey(variableName)) {
-                    buckets.get(variableName).add(atom.getTrieBasedRelation());
+                    buckets.get(variableName).add(atomTrieBasedRelation);
                 } else {
                     List<TrieBasedRelation> TrieBasedRelations = new ArrayList<>();
-                    TrieBasedRelations.add(atom.getTrieBasedRelation());
+                    TrieBasedRelations.add(atomTrieBasedRelation);
                     buckets.put(variableName, TrieBasedRelations);
                 }
             }
@@ -141,8 +145,8 @@ public class LeapFrogTrieJoin<T extends Comparable> {
 
         depth++;
 
-        for (int i = 0; i < leapfrogJoins[depth].getIters().length; i++) {
-            LFTrieBasedRelationIterator[] iters = leapfrogJoins[depth].getIters();
+        for (int i = 0; i < leapfrogJoins[depth].getIterators().length; i++) {
+            LFTrieBasedRelationIterator[] iters = leapfrogJoins[depth].getIterators();
             iters[i].open();
         }
 
@@ -160,7 +164,7 @@ public class LeapFrogTrieJoin<T extends Comparable> {
 
     public void up() throws Exception {
 
-        for (LFTrieBasedRelationIterator iterator : leapfrogJoins[depth].getIters()) {
+        for (LFTrieBasedRelationIterator iterator : leapfrogJoins[depth].getIterators()) {
             iterator.up();
         }
         depth--;

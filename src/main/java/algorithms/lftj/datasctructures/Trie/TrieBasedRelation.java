@@ -1,8 +1,8 @@
-package algorithms.lftj.datastructures;
+package algorithms.lftj.datasctructures.Trie;
 
-import algorithms.lftj.modules.LFTrieBasedRelationIterator;
-import joiner.datastructures.Relation;
-import joiner.datastructures.Tuple;
+import algorithms.lftj0.modules.old.LFTrieBasedRelationIterator;
+import query.Relation;
+import query.Tuple;
 
 public class TrieBasedRelation<T> extends Trie<T> {
 
@@ -23,7 +23,7 @@ public class TrieBasedRelation<T> extends Trie<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private void importFromRelation(Relation<T> relation    ) {
+    private void importFromRelation(Relation<T> relation) {
         for (Object aRelation : relation) {
             this.add((Tuple<T>) aRelation);
         }

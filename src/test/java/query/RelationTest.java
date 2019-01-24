@@ -1,7 +1,5 @@
-package joiner;
+package query;
 
-import joiner.datastructures.Relation;
-import joiner.datastructures.Tuple;
 import org.junit.Test;
 
 public class RelationTest {
