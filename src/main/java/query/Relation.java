@@ -1,42 +1,61 @@
 package query;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * class Relation
- *
+ * <p>
  * A relation is an ordered list of tuples of the same arity and type of the (basic) element.
  *
  * @param <T>
  */
-public class Relation<T> implements Iterable<T> {
+public class Relation<T extends Comparable<T>> implements Iterable<T> {
 
-    private Set<T> container;
+    private List<T> elements;
     private Integer arity;
 
     public Relation(Integer arity) {
         this.arity = arity;
-        this.container = new HashSet<>();
+        this.elements = new ArrayList<>();
+    }
+
+    public Relation(Tuple<T>... tuples) throws Exception {
+        if (tuples.length > 0) {
+            this.arity = tuples[0].size();
+            this.addAll(tuples);
+        } else {
+            throw new Exception("No tuples provided for relation constructor.");
+        }
     }
 
     @SuppressWarnings("unchecked")
     public void add(Tuple<T> tuple) throws Exception {
+
         if (tuple.size() != this.arity) {
             throw new Exception("Tuple size mismatch for relation arity.");
         }
-        this.container.add((T) tuple);
+
+        if (this.elements == null) {
+            this.elements = new ArrayList<>();
+        }
+
+        this.elements.add((T) tuple);
+        Collections.sort(elements);
     }
 
     @SuppressWarnings("unchecked")
     public void addAll(Tuple... tuples) {
-        Collections.addAll(this.container, (T[]) tuples);
+
+        if (this.elements == null) {
+            this.elements = new ArrayList<>();
+        }
+
+        Collections.addAll(this.elements, (T[]) tuples);
+        Collections.sort(elements);
     }
 
-    public Object[] toArray() {
-        return this.container.toArray();
+    public List<T> getElements() {
+        return elements;
     }
 
     public Integer getArity() {
@@ -45,7 +64,7 @@ public class Relation<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return container.iterator();
+        return elements.iterator();
     }
 
 }

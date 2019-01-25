@@ -13,7 +13,7 @@ import java.util.*;
  * class NestedLoopJoin
  *
  * Nested loop join implementation according to the Algorithm interface.
- * The result is a list of join results, where a join result is a list of pairs [matched variable name => value]
+ * The result is a list of join results, where a join result is a list of pairs [matched variable name : value]
  *
  * @param <T>
  */
@@ -69,7 +69,7 @@ public class NestedLoopJoin<T> implements Algorithm<T> {
      */
     private void nestedLoop(Relation[] list, int depth) {
 
-        for (Object tuple : list[depth].toArray()) {
+        for (Object tuple : list[depth]) {
             actualTuples.push(new Pair<>(list[depth], (Tuple) tuple));
             if (depth < list.length - 1) {
                 nestedLoop(list, depth + 1);

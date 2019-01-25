@@ -1,6 +1,5 @@
-package joiner;
+package query;
 
-import joiner.datastructures.Tuple;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,7 +16,7 @@ public class TupleTest {
 
     @Test
     public void stringTupleToStringTest() {
-        Tuple<String> integerTuple = new Tuple<>(Arrays.asList("one", "two", "three"));
-        assertEquals("[one,two,three]", integerTuple.toString());
+        Tuple<String> stringTuple = new Tuple<>(Arrays.asList("one", "two", "three"));
+        assertEquals("[one,two,three]", stringTuple.toString());
     }
 }

@@ -11,7 +11,7 @@ import java.util.StringJoiner;
  *
  * @param <T>
  */
-public class Tuple<T> {
+public class Tuple<T extends Comparable<T>> implements Comparable<Tuple<T>> {
     private final List<T> elements;
 
     public Tuple(List<T> elements) {
@@ -50,5 +50,17 @@ public class Tuple<T> {
         }
 
         return '[' + joiner.toString() + ']';
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public int compareTo(Tuple<T> o2) {
+        for (int i = 0; i < Math.min(this.getElements().size(), o2.getElements().size()); i++) {
+            int c = this.getElements().get(i).compareTo(o2.getElements().get(i));
+            if (c != 0) {
+                return c;
+            }
+        }
+        return Integer.compare(this.getElements().size(), o2.getElements().size());
     }
 }

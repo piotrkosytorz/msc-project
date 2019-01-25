@@ -5,7 +5,7 @@ import algorithms.lftj.datasctructures.Trie.TrieBasedRelation;
 
 import java.util.*;
 
-public class LeapFrogTrieJoin<T extends Comparable> {
+public class LeapFrogTrieJoin<T extends Comparable<T>> {
 
     private String[] variablesOrdering;
     private LeapFrogJoin[] leapfrogJoins;

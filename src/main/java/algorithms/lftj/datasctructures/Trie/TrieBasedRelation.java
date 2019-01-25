@@ -4,7 +4,7 @@ import algorithms.lftj0.modules.old.LFTrieBasedRelationIterator;
 import query.Relation;
 import query.Tuple;
 
-public class TrieBasedRelation<T> extends Trie<T> {
+public class TrieBasedRelation<T extends Comparable<T>> extends Trie<T> {
 
     private LFTrieBasedRelationIterator lfTrieBasedRelationIterator;
 

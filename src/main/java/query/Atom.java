@@ -9,7 +9,7 @@ package query;
  *
  * @param <T>
  */
-public final class Atom<T> {
+public final class Atom<T extends Comparable<T>> {
 
     private final Relation<T> relation;
     private final String[] variables;
