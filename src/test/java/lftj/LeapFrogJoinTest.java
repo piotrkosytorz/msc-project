@@ -1,10 +1,15 @@
 package lftj;
 
 import algorithms.lftj.LeapFrogJoin;
-import helpers.ConsoleColorsHelper;
 import org.junit.Test;
 import query.Relation;
 import query.Tuple;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class LeapFrogJoinTest {
 
@@ -25,6 +30,7 @@ public class LeapFrogJoinTest {
     public void simpleJoinTest() throws Exception {
 
         Relation<Integer>[] relations = new Relation[3];
+        List<Tuple<Integer>> results = new ArrayList<>();
 
         relations[0] = new Relation<>(
                 new Tuple<>(3),
@@ -61,14 +67,22 @@ public class LeapFrogJoinTest {
 
         leapFrogJoin.leapfrogInit();
         leapFrogJoin.leapfrogSearch();
-        System.out.println(ConsoleColorsHelper.BLUE + "head element: " + leapFrogJoin.getKey() + ConsoleColorsHelper.RESET);
+
 
         while (!leapFrogJoin.isAtEnd()) {
+            results.add((Tuple) leapFrogJoin.getKey());
             leapFrogJoin.leapfrogNext();
-            System.out.println(ConsoleColorsHelper.BLUE + "mid element: " + leapFrogJoin.getKey() + ConsoleColorsHelper.RESET);
         }
 
-//        System.out.println("tail element: " + leapFrogJoin.getKey());
+        Collections.sort(results);
+        List<Tuple<Integer>> expectedResult = new ArrayList<>();
+        expectedResult.add(new Tuple<>(0));
+        expectedResult.add(new Tuple<>(5));
+        expectedResult.add(new Tuple<>(8));
+        expectedResult.add(new Tuple<>(11));
+
+        assertEquals(results.toString(), expectedResult.toString());
+
     }
 
 }

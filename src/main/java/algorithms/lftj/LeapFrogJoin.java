@@ -12,7 +12,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
     private int p;
     private T key;
 
-    private boolean lastIteration;
+    private int movesToGo = -1;
 
     /**
      * The leapfrog-init method is provided an array of iterators; it ensures the iterators are sorted according
@@ -54,17 +54,10 @@ public class LeapFrogJoin<T extends Comparable<T>> {
             }
         }
 
-        // This is possible, because LinearIterator implements Comparable interface and has a compareTo method that
+        // LinearIterator implements Comparable interface and has a compareTo method that
         // refers to keys at which the iterators are positioned.
         Arrays.sort(iterators);
-
         this.p = 0;
-
-        System.out.println("<LeapFrogInit>");
-        System.out.println("p: " + this.p);
-        System.out.println("p-1: " + signedMod(this.p - 1, this.iterators.length));
-        System.out.println("</LeapFrogInit>");
-
     }
 
     /**
@@ -97,37 +90,30 @@ public class LeapFrogJoin<T extends Comparable<T>> {
         while (true) {
             T x = (T) this.iterators[this.p].key();
 
-//            System.out.println("<LeapFrogSearch>");
-//            System.out.println("Iterator[" + signedMod(this.p - 1, k) + "][pos:" + this.iterators[signedMod(this.p - 1, k)].p + ", val:" + x1 + "]");
-//            System.out.println("Iterator[" + this.p + "][pos:" + this.iterators[p].p + ", val:" + x + "]");
-//            System.out.println("</LeapFrogSearch>");
-
             if (x.compareTo(x1) == 0) {
                 this.key = x;
-                if (this.lastIteration) {
-                    this.atEnd = true;
-                }
                 return;
             } else {
                 this.iterators[this.p].seek(x1);
-                if (this.iterators[this.p].atEnd() && !this.lastIteration) {
+                if (this.iterators[this.p].atEnd() && movesToGo < 0) {
 
-                    this.lastIteration = true;
-
-                    // Turn on the "roller".
+                    // movesToGo
                     // This is a modification on the original algorithm, which stops too early.
                     // The problem is, that once the first linear iterator reaches the end, there are still all the
-                    // other iterators that must bechecked (thus at most k-1 iterators), because the last key may be
+                    // other iterators that must bechecked (thus exactly k-1 iterators), because the last key may be
                     // equal to the current x and the tails of the other iterators must still be checked for that.
-                    //
-                    // Note: The iterations should stop immediately, after it is known that current x is the last key.
+                    movesToGo = k - 1;
+                    x1 = (T) iterators[this.p].key();
+                    this.p = (this.p + 1) % k;
 
-                } else if (this.iterators[this.p].atEnd() && this.lastIteration) {
+                } else if (movesToGo == 0) {
                     this.atEnd = true;
                     return;
+
                 } else {
                     x1 = (T) iterators[this.p].key();
                     this.p = (this.p + 1) % k;
+
                 }
             }
         }
@@ -191,7 +177,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
     }
 
     /**
-     * Modulo on one-sided torus (Möbius strip)
+     * Modulo on Möbius strip
      *
      * @param n
      * @param m

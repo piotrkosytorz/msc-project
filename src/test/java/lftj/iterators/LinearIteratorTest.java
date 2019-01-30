@@ -2,9 +2,11 @@ package lftj.iterators;
 
 import algorithms.lftj.iterators.LinearIterator;
 import org.junit.Test;
+import query.Tuple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -54,6 +56,16 @@ public class LinearIteratorTest {
         assertEquals(iterator.key(), new Integer(10000));
 
         assertTrue(iterator.atEnd());
+    }
+
+    @Test
+    public void seekTest2() {
+        List<Integer> elements = new ArrayList<>(Arrays.asList(2,5,0,9,8,7,11));
+        Collections.sort(elements);
+        LinearIterator<Integer> iterator = new LinearIterator<>(elements);
+
+        iterator.seek(10);
+        assertEquals(iterator.key(), new Integer(11));
     }
 
     @Test
