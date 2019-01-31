@@ -1,5 +1,5 @@
+import algorithms.lftj.LeapFrogTrieJoin;
 import query.Atom;
-import algorithms.lftj0.LeapFrogTrieJoin;
 import algorithms.nestedloop.NestedLoopJoin;
 import query.Query;
 import query.Relation;

@@ -1,13 +1,12 @@
 package algorithms.lftj;
 
-import algorithms.lftj.iterators.LinearIterator;
-import query.Relation;
+import algorithms.lftj.iterators.LeapFrogIterator;
 
 import java.util.Arrays;
 
 public class LeapFrogJoin<T extends Comparable<T>> {
 
-    private LinearIterator[] iterators;
+    private LeapFrogIterator[] iterators;
     private boolean atEnd = false;
     private int p;
     private T key;
@@ -18,17 +17,10 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      * The leapfrog-init method is provided an array of iterators; it ensures the iterators are sorted according
      * to the key at which they are positioned, an invariant that is maintained throughout.
      *
-     * @param relations
+     * @param iterators
      */
-    public LeapFrogJoin(Relation<T>[] relations) {
-
-        // bootstrap
-        this.iterators = new LinearIterator[relations.length];
-
-        // get linear iterator for each relation
-        for (int i = 0; i < relations.length; i++) {
-            this.iterators[i] = new LinearIterator<>(relations[i]);
-        }
+    public LeapFrogJoin(LeapFrogIterator<T>[] iterators) {
+        this.iterators = iterators;
     }
 
     /**
@@ -47,7 +39,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
     public void leapfrogInit() {
 
         this.atEnd = false;
-        for (LinearIterator linearIterator : this.iterators) {
+        for (LeapFrogIterator linearIterator : this.iterators) {
             if (linearIterator.atEnd()) {
                 this.atEnd = true;
                 break;
@@ -156,9 +148,12 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      *   leapfrog-search();
      * </pre>
      */
-    public void leapfrogSeek() {
+    @SuppressWarnings("unchecked")
+    public void leapfrogSeek(T seekKey) {
 
         int k = this.iterators.length;
+
+        this.iterators[this.p].seek(seekKey);
 
         if (this.iterators[this.p].atEnd()) {
             this.atEnd = true;
@@ -174,6 +169,10 @@ public class LeapFrogJoin<T extends Comparable<T>> {
 
     public T getKey() {
         return key;
+    }
+
+    public LeapFrogIterator[] getIterators() {
+        return iterators;
     }
 
     /**

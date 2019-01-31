@@ -1,28 +1,15 @@
 package algorithms.lftj.iterators;
 
-import query.Relation;
-
 import java.util.List;
 
 /**
  * Linear Iterator for LeapFrog Join
  * <a href="http://openproceedings.org/ICDT/2014/paper_13.pdf">Source paper</a>
  */
-public class LinearIterator<T extends Comparable<T>> implements Comparable<LinearIterator<T>> {
+public class LinearIterator<T extends Comparable<T>> implements LeapFrogIterator<T>, Comparable<LinearIterator<T>> {
 
     private List<T> elements;
     public int p;
-
-    /**
-     * CAUTION!
-     * There is an assumption that the list of elements is already sorted!
-     *
-     * @param relation
-     */
-    public LinearIterator(Relation<T> relation) {
-        this.elements = relation.getElements();
-        this.p = 0;
-    }
 
     /**
      * CAUTION!
@@ -40,6 +27,7 @@ public class LinearIterator<T extends Comparable<T>> implements Comparable<Linea
      *
      * @return T
      */
+    @Override
     public T key() {
         return this.elements.get(this.p);
     }
@@ -47,6 +35,7 @@ public class LinearIterator<T extends Comparable<T>> implements Comparable<Linea
     /**
      * Proceeds to the next key
      */
+    @Override
     public void next() {
         this.p++;
     }
@@ -58,6 +47,7 @@ public class LinearIterator<T extends Comparable<T>> implements Comparable<Linea
      * @param seekKey
      * @return int
      */
+    @Override
     public int seek(T seekKey) {
         while (!this.atEnd() && (elements.get(p).compareTo(seekKey) < 0)) {
             this.next();
@@ -70,6 +60,7 @@ public class LinearIterator<T extends Comparable<T>> implements Comparable<Linea
      *
      * @return bool
      */
+    @Override
     public boolean atEnd() {
         return this.p >= this.elements.size() - 1;
     }
@@ -77,9 +68,15 @@ public class LinearIterator<T extends Comparable<T>> implements Comparable<Linea
     /**
      * @return List<T> elements
      */
-    List<T> getElements() {
+    public List<T> getElements() {
         return this.elements;
     }
+
+    @Override
+    public void open() throws Exception {}
+
+    @Override
+    public void up() throws Exception {}
 
     @Override
     public int compareTo(LinearIterator<T> o2) {

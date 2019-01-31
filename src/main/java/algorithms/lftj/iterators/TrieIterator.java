@@ -1,4 +1,4 @@
-package algorithms.lftj0.modules.old;
+package algorithms.lftj.iterators;
 
 import algorithms.lftj.datasctructures.Trie.Trie;
 
@@ -7,12 +7,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-public class LFTrieBasedRelationIterator<T extends Comparable> implements Comparable<LFTrieBasedRelationIterator> {
+public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, Comparable<TrieIterator> {
 
     private Trie<T>.Node currentNode;
-    private Stack<Integer> indexStack = new Stack<>();  // contains current path from the root
 
-    public LFTrieBasedRelationIterator(Trie<T>.Node startNode) {
+    // indexStack is the bookkeeping part
+    // contains current path from the root to current node
+    private Stack<Integer> indexStack = new Stack<>();
+
+    public TrieIterator(Trie<T>.Node startNode) {
         this.currentNode = startNode;
     }
 
@@ -21,14 +24,16 @@ public class LFTrieBasedRelationIterator<T extends Comparable> implements Compar
      *
      * @return key
      */
-    T key() {
+    @Override
+    public T key() {
         return this.currentNode.getKey();
     }
 
     /**
      * Proceeds to the next key
      */
-    void next() throws Exception {
+    @Override
+    public void next() {
 
         if (atEnd()) {
             return;
@@ -46,18 +51,18 @@ public class LFTrieBasedRelationIterator<T extends Comparable> implements Compar
      *
      * @param seekKey
      */
-    void seek(T seekKey) {
+    @Override
+    public int seek(T seekKey) {
         int i = indexStack.pop();
         List<T> elementsAtCurrentDepth = getElementsAtCurrentDepth();
-        while (i < elementsAtCurrentDepth.size() && elementsAtCurrentDepth.get(i).compareTo(seekKey) < 0) {
-            i++;
+
+        while (!this.atEnd() && (elementsAtCurrentDepth.get(i).compareTo(seekKey) < 0)) {
+            this.next();
         }
 
-        if (i >= elementsAtCurrentDepth.size()) {
-            i = Integer.MAX_VALUE;  // +∞ @todo consider if this should be done differently
-        }
         indexStack.push(i);
         currentNode = currentNode.getParent().getNthChild(i);
+        return i;
     }
 
     /**
@@ -65,14 +70,17 @@ public class LFTrieBasedRelationIterator<T extends Comparable> implements Compar
      *
      * @return
      */
-    boolean atEnd() {
-        return !(currentNode.hasParent() && currentNode.getParent().getChildren().size() > Integer.sum(indexStack.peek(), 1)); // is its parent last child = has no more siblings
+    @Override
+    public boolean atEnd() {
+        // if current node is its parent last child => has no more siblings => iterator is at end
+        return !(currentNode.hasParent() && currentNode.getParent().getChildren().size() > Integer.sum(indexStack.peek(), 1));
     }
 
     /**
      * Proceed to the first key at the next depth
      */
-    void open() throws Exception {
+    @Override
+    public void open() throws Exception {
         this.currentNode = this.currentNode.getFirstChild();
         if (this.currentNode != null) {
             indexStack.push(0);
@@ -84,7 +92,8 @@ public class LFTrieBasedRelationIterator<T extends Comparable> implements Compar
      *
      * @throws Exception
      */
-    void up() throws Exception {
+    @Override
+    public void up() throws Exception {
         Trie<T>.Node parent = currentNode.getParent();
         if (parent != null) {
             indexStack.pop(); // - current level is reset
@@ -95,23 +104,27 @@ public class LFTrieBasedRelationIterator<T extends Comparable> implements Compar
     }
 
     @Override
-    public int compareTo(LFTrieBasedRelationIterator LFTrieBasedRelationIterator2) {
-        int l = Integer.min(getElementsAtCurrentDepth().size(), LFTrieBasedRelationIterator2.getElementsAtCurrentDepth().size());
-        for (int i = 0; i < l; i++) {
-            if (getElementsAtCurrentDepth().get(i).compareTo(LFTrieBasedRelationIterator2.getElementsAtCurrentDepth().get(i)) < 0)
-                return -1;
-            if (getElementsAtCurrentDepth().get(i).compareTo(LFTrieBasedRelationIterator2.getElementsAtCurrentDepth().get(i)) > 0)
-                return 1;
+    public int compareTo(TrieIterator o2) {
+        for (int i = 0; i < Math.min(this.getElementsAtCurrentDepth().size(), o2.getElementsAtCurrentDepth().size()); i++) {
+            int c = this.getElementsAtCurrentDepth().get(i).compareTo(o2.getElementsAtCurrentDepth().get(i));
+            if (c != 0) {
+                return c;
+            }
         }
-        return 0;
+        return Integer.compare(this.getElementsAtCurrentDepth().size(), o2.getElementsAtCurrentDepth().size());
     }
 
+    /**
+     * Returns a list of elements at current depth
+     *
+     * @return ArrayList
+     */
     private List<T> getElementsAtCurrentDepth() {
         List<T> l = new ArrayList<>();
         if (currentNode.hasParent()) {
             List<Trie<T>.Node> children = currentNode.getParent().getChildren();
             for (Trie<T>.Node n : children) {
-                l.add((T) n.getKey());
+                l.add(n.getKey());
             }
             Collections.sort(l);
             return l;

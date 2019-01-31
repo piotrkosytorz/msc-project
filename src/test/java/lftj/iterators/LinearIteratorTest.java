@@ -2,7 +2,6 @@ package lftj.iterators;
 
 import algorithms.lftj.iterators.LinearIterator;
 import org.junit.Test;
-import query.Tuple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +59,7 @@ public class LinearIteratorTest {
 
     @Test
     public void seekTest2() {
-        List<Integer> elements = new ArrayList<>(Arrays.asList(2,5,0,9,8,7,11));
+        List<Integer> elements = new ArrayList<>(Arrays.asList(2, 5, 0, 9, 8, 7, 11));
         Collections.sort(elements);
         LinearIterator<Integer> iterator = new LinearIterator<>(elements);
 
