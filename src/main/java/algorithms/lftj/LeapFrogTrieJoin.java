@@ -126,6 +126,8 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
      */
     private void next() {
         leapfrogJoins[depth].leapfrogNext();
+        currentKeysStack.pop();
+        currentKeysStack.push(key());
     }
 
     /**
@@ -154,6 +156,8 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
         }
 
         leapfrogJoins[depth].leapfrogInit();
+
+        this.currentKeysStack.add(key());
     }
 
     public void up() throws Exception {
@@ -163,6 +167,8 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
         }
 
         depth--;
+
+        currentKeysStack.pop();
     }
 
     @Override
@@ -171,7 +177,50 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
     }
 
     @Override
+    @SuppressWarnings("all")
     public List<Map<String, T>> run() throws Exception {
+
+        while (depth < maxDepth()) {
+            open();
+        }
+
+        System.out.println("OPEN");
+        System.out.println(currentKeysStack);
+        System.out.println("AtEnd: " + atEnd());
+
+        next();
+        System.out.println("NEXT");
+        System.out.println("AtEnd: " + atEnd());
+        System.out.println(currentKeysStack);
+
+        up();
+        System.out.println("UP");
+        System.out.println("AtEnd: " + atEnd());
+        System.out.println(currentKeysStack);
+
+        next();
+        System.out.println("NEXT");
+        System.out.println("AtEnd: " + atEnd());
+        System.out.println(currentKeysStack);
+
+        up();
+        System.out.println("UP");
+        System.out.println("AtEnd: " + atEnd());
+        System.out.println(currentKeysStack);
+
+        next();
+        System.out.println("NEXT");
+        System.out.println("AtEnd: " + atEnd());
+        System.out.println(currentKeysStack);
+
+//        open();
+//        System.out.println("AtEnd: " + atEnd());
+
+
+
+//        System.out.println(currentKeysStack);
+
+
         return null;
     }
 }
