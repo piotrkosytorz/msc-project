@@ -1,6 +1,6 @@
 import algorithms.lftj.LeapFrogTrieJoin;
-import query.Atom;
 import algorithms.nestedloop.NestedLoopJoin;
+import query.Atom;
 import query.Query;
 import query.Relation;
 import query.Tuple;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Relation<String> relR = new Relation<>(2);
         Relation<String> relS = new Relation<>(2);
@@ -45,13 +45,13 @@ public class Main {
                 new Tuple<>("7", "5")
         );
 
-        Query<Integer> query = new Query<>(
+        Query<String> query = new Query<>(
                 new Atom<>(relR, "a", "b"),
                 new Atom<>(relS, "b", "c"),
                 new Atom<>(relT, "a", "c")
         );
 
-        List<Map<String, Integer>> res;
+        List<Map<String, String>> res;
         long startTime;
         long endTime;
 
@@ -62,21 +62,21 @@ public class Main {
             System.out.println("Nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
             System.out.println("Nested loop result: \n\t" + res);
         } catch (Exception e) {
-            System.out.println("Nested loop fail!!!!: \n\t" + e.getLocalizedMessage());
+            System.out.println("Nested loop fail!: \n\t" + e.getLocalizedMessage());
         }
 
         System.out.println("\n======================================\n");
 
-        try {
-            startTime = System.currentTimeMillis();
-            res = query.resolve(new LeapFrogTrieJoin());
-            endTime = System.currentTimeMillis();
+//        try {
+        startTime = System.currentTimeMillis();
+        res = query.resolve(new LeapFrogTrieJoin());
+        endTime = System.currentTimeMillis();
 
-            System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");
-            System.out.println("LFTJ result: \n\t" + res);
-        } catch (Exception e) {
-            System.out.println("LFTJ fail!!!!: \n\t" + e.getLocalizedMessage());
-        }
+        System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");
+        System.out.println("LFTJ result: \n\t" + res);
+//        } catch (Exception e) {
+//            System.out.println("LFTJ fail!: \n\t" + e.getLocalizedMessage());
+//        }
     }
 
 }

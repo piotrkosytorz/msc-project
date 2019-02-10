@@ -15,7 +15,7 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
     // depth = -1 to indicate the triejoin is positioned at the root of the binding trie. (see the paper)
     private int depth = -1;
 
-    private String[] variablesOrdering;
+    private String[] variables;
     private LeapFrogJoin[] leapfrogJoins;
 
     private Stack<T> currentKeysStack = new Stack<>();
@@ -45,7 +45,7 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
      * @param atoms
      */
     @SuppressWarnings("Duplicates")
-    private void bootstrap(Atom[] atoms) {
+    public void bootstrap(Atom[] atoms) {
 
         // I decided to sort the query in buckets of variables with relations referenced to them:
         HashMap<String, List<TrieRelation>> buckets = new HashMap<>();
@@ -70,21 +70,21 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
         // influences significantly the average execution time, but is irrelevant for worst cases.
         // This is the place where variables ordering optimization should take place.
 
-        this.variablesOrdering = buckets.keySet().toArray(new String[0]);
+        this.variables = buckets.keySet().toArray(new String[0]);
 
         // Prepare an array of leapfrogJoins - size = number of variables
-        leapfrogJoins = new LeapFrogJoin[variablesOrdering.length];
+        leapfrogJoins = new LeapFrogJoin[variables.length];
 
         // The leapfrog join for a variable x is given an array of pointers to trie-iterators, one for each atom
         // in which x appears. (see paper)
         // Here I am constructing iterators and leapfrog joins
-        for (int i = 0; i < variablesOrdering.length; i++) {
-            List<TrieRelation> trieRelations = buckets.get(variablesOrdering[i]);
-            TrieIterator[] iterators = new TrieIterator[trieRelations.size()];
+        for (int i = 0; i < variables.length; i++) {
+            List<TrieRelation> trieRelations = buckets.get(variables[i]);
+            TrieIterator[] trieIterators = new TrieIterator[trieRelations.size()];
             for (int j = 0; j < trieRelations.size(); j++) {
-                iterators[j] = trieRelations.get(j).getTrieIterator();
+                trieIterators[j] = trieRelations.get(j).getTrieIterator();
             }
-            leapfrogJoins[i] = new LeapFrogJoin(iterators);
+            leapfrogJoins[i] = new LeapFrogJoin(trieIterators);
         }
     }
 
@@ -94,7 +94,7 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
      * @return Integer maxDepth
      */
     private int maxDepth() {
-        return variablesOrdering.length - 1;
+        return variables.length - 1;
     }
 
     // The linear lfIterator portions of the trie-lfIterator interface (namely key(), atEnd(), next(), and seek())
@@ -124,27 +124,8 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
      *
      * @throws Exception - exception is forwarded from leapfrog join portion.
      */
-    @SuppressWarnings("Duplicates")
-    private void next() throws Exception {
-
+    private void next() {
         leapfrogJoins[depth].leapfrogNext();
-
-        // currently known part of the tuple
-        currentKeysStack.pop();
-        currentKeysStack.push(key());
-
-        // Collect the whole tuple to the results list
-        if (depth == maxDepth()) {
-
-            // iterate through stack and add results to cumulativeResult
-
-            Map<String, T> result = new HashMap<>();
-            for (int i = 0; i < currentKeysStack.size(); i++) {
-                result.put(variablesOrdering[i], currentKeysStack.get(i));
-            }
-            this.cumulativeResult.add(result);
-
-        }
     }
 
     /**
@@ -152,7 +133,6 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
      *
      * @param seekKey
      */
-    @SuppressWarnings("unchecked")
     public void seek(T seekKey) {
         leapfrogJoins[depth].leapfrogSeek(seekKey);
     }
@@ -163,23 +143,17 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
      * @throws Exception
      */
     @SuppressWarnings("Duplicates")
-    public void open() throws Exception{
+    public void open() throws Exception {
+
         depth++;
-        for (int i = 0; i < leapfrogJoins[depth].getIterators().length; i++) {
-            LeapFrogIterator[] iterators = leapfrogJoins[depth].getIterators();
-            iterators[i].open();
+
+        // each iter in leapfrog join at current depth
+        LeapFrogIterator[] iterators = leapfrogJoins[depth].getIterators();
+        for (LeapFrogIterator iterator : iterators) {
+            iterator.open();
         }
 
         leapfrogJoins[depth].leapfrogInit();
-        currentKeysStack.push(key());
-
-        if (depth == maxDepth()) {
-            Map<String, T> result = new HashMap<>();
-            for (int i = 0; i < currentKeysStack.size(); i++) {
-                result.put(variablesOrdering[i], currentKeysStack.get(i));
-            }
-            this.cumulativeResult.add(result);
-        }
     }
 
     public void up() throws Exception {
@@ -187,57 +161,8 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
         for (LeapFrogIterator iterator : leapfrogJoins[depth].getIterators()) {
             iterator.up();
         }
+
         depth--;
-        currentKeysStack.pop();
-    }
-
-    private boolean allLeapFrogJoinsAtEnd() {
-        return Arrays.stream(leapfrogJoins).allMatch(LeapFrogJoin::isAtEnd);
-    }
-
-    private void jumpOver() throws Exception {
-
-        // operate only within the variables scope
-        if (depth > 0) {
-
-            this.up();
-
-            if (leapfrogJoins[depth].isAtEnd()) {
-                jumpOver();
-            } else {
-                this.next();
-            }
-            this.open();
-
-        } else {
-            // out of scope -> end of the algorithm
-            throw new Exception("LFTJ: Algorithm jump over end of scope.");
-        }
-    }
-
-    public List<Map<String, T>> collectAllJoinResults() throws Exception {
-
-        // reset all
-        cumulativeResult = new ArrayList<>();
-        currentKeysStack = new Stack<>();
-
-        // opening the trees until the first join found
-        for (int i = 0; i <= maxDepth(); i++) {
-            this.open();
-        }
-
-        while (!allLeapFrogJoinsAtEnd()) {
-            while (!leapfrogJoins[depth].isAtEnd()) {
-                this.next();
-            }
-            try {
-                jumpOver();
-            } catch (Exception e) {
-                break;
-            }
-        }
-
-        return cumulativeResult;
     }
 
     @Override
@@ -246,7 +171,7 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
     }
 
     @Override
-    public List<Map<String, T>> run() {
+    public List<Map<String, T>> run() throws Exception {
         return null;
     }
 }

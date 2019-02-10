@@ -56,10 +56,10 @@ public abstract class Trie<T> {
         }
 
         public Node getNextSibling(int i) {
-            return getParent().getNthChild(i + 1);
+            return getParent().getChildByIndex(i + 1);
         }
 
-        public Node getNthChild(int i) {
+        public Node getChildByIndex(int i) {
             return children.get(i);
         }
 

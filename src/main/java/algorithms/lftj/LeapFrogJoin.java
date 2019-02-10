@@ -11,8 +11,6 @@ public class LeapFrogJoin<T extends Comparable<T>> {
     private int p;
     private T key;
 
-    private int movesToGo = -1;
-
     /**
      * The leapfrog-init method is provided an array of iterators; it ensures the iterators are sorted according
      * to the key at which they are positioned, an invariant that is maintained throughout.
@@ -39,8 +37,9 @@ public class LeapFrogJoin<T extends Comparable<T>> {
     public void leapfrogInit() {
 
         this.atEnd = false;
-        for (LeapFrogIterator linearIterator : this.iterators) {
-            if (linearIterator.atEnd()) {
+
+        for (LeapFrogIterator iterator : this.iterators) {
+            if (iterator.atEnd()) {
                 this.atEnd = true;
                 break;
             }
@@ -50,6 +49,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
         // refers to keys at which the iterators are positioned.
         Arrays.sort(iterators);
         this.p = 0;
+        leapfrogSearch();
     }
 
     /**
@@ -87,25 +87,12 @@ public class LeapFrogJoin<T extends Comparable<T>> {
                 return;
             } else {
                 this.iterators[this.p].seek(x1);
-                if (this.iterators[this.p].atEnd() && movesToGo < 0) {
-
-                    // movesToGo
-                    // This is a modification on the original algorithm, which stops too early.
-                    // The problem is, that once the first linear iterator reaches the end, there are still all the
-                    // other iterators that must bechecked (thus exactly k-1 iterators), because the last key may be
-                    // equal to the current x and the tails of the other iterators must still be checked for that.
-                    movesToGo = k - 1;
-                    x1 = (T) iterators[this.p].key();
-                    this.p = (this.p + 1) % k;
-
-                } else if (movesToGo == 0) {
+                if (this.iterators[this.p].atEnd()) {
                     this.atEnd = true;
                     return;
-
                 } else {
                     x1 = (T) iterators[this.p].key();
                     this.p = (this.p + 1) % k;
-
                 }
             }
         }
@@ -124,9 +111,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      * </pre>
      */
     public void leapfrogNext() {
-
         int k = this.iterators.length;
-
         this.iterators[this.p].next();
         if (this.iterators[this.p].atEnd()) {
             this.atEnd = true;

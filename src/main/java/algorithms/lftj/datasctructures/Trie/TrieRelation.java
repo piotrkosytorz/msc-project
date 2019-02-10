@@ -12,13 +12,20 @@ public class TrieRelation<T extends Comparable<T>> extends Trie<T> {
         importFromRelation(relation);
     }
 
+    public TrieRelation(Tuple<T>... tuples) {
+        for (Tuple tuple : tuples) {
+            this.add(tuple);
+        }
+    }
+
     public void add(Tuple<T> tuple) {
         this.insert(tuple.toArray());
     }
 
     public TrieIterator getTrieIterator() {
-        if (trieIterator == null)
+        if (trieIterator == null) {
             trieIterator = new TrieIterator(this.getRoot());
+        }
         return trieIterator;
     }
 
