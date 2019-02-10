@@ -5,20 +5,22 @@ import algorithms.lftj.datasctructures.Trie.Trie;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, Comparable<TrieIterator> {
 
     // pointer to current node in the tree
     private Trie<T>.Node currentNode;
 
-    // index of current node in the parent's children list
-    private int currentP = 0;
+    // index of current node at current depth
+    private Stack<Integer> currentPoiners = new Stack<>();
 
     // flag, true when iterator is out of bound at current level (currentP >= parent's children size)
     private boolean atEnd = false;
 
     public TrieIterator(Trie<T>.Node startNode) {
         this.currentNode = startNode;
+        this.currentPoiners.push(0);
     }
 
     /**
@@ -42,14 +44,14 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
             return;
         }
 
-        currentP++;
+        currentPoiners.push(currentPoiners.pop()+1);
 
-        if (currentP >= this.currentNode.getParent().getNumberOfChildren()) {
+        if (currentPoiners.peek() >= this.currentNode.getParent().getNumberOfChildren()) {
             this.atEnd = true;
             return;
         }
 
-        this.currentNode = this.currentNode.getParent().getChildByIndex(currentP);
+        this.currentNode = this.currentNode.getParent().getChildByIndex(currentPoiners.peek());
     }
 
     /**
@@ -63,11 +65,11 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
 
         List<T> elementsAtCurrentDepth = getElementsAtCurrentDepth();
 
-        while (!this.atEnd() && (elementsAtCurrentDepth.get(currentP).compareTo(seekKey) < 0)) {
+        while (!this.atEnd() && (elementsAtCurrentDepth.get(currentPoiners.peek()).compareTo(seekKey) < 0)) {
             this.next();
         }
 
-        return currentP;
+        return currentPoiners.peek();
     }
 
     /**
@@ -86,6 +88,7 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
     @Override
     public void open() throws Exception {
         this.currentNode = this.currentNode.getFirstChild();
+        currentPoiners.push(0);
     }
 
     /**
@@ -98,6 +101,7 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
         Trie<T>.Node parent = currentNode.getParent();
         if (parent != null) {
             currentNode = parent;
+            currentPoiners.pop();
         } else {
             throw new Exception("Illegal operation: called \"up()\" on root element.");
         }
