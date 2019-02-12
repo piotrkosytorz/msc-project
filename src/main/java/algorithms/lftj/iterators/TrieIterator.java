@@ -15,9 +15,6 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
     // index of current node at current depth
     private Stack<Integer> currentPoiners = new Stack<>();
 
-    // flag, true when iterator is out of bound at current level (currentP >= parent's children size)
-    private boolean atEnd = false;
-
     public TrieIterator(Trie<T>.Node startNode) {
         this.currentNode = startNode;
         this.currentPoiners.push(0);
@@ -39,17 +36,10 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
     @Override
     public void next() {
 
-        if (!this.currentNode.hasParent()) {
-            atEnd = true;
-            return;
-        }
+        currentPoiners.push(currentPoiners.pop() + 1);
 
-        currentPoiners.push(currentPoiners.pop()+1);
-
-        if (currentPoiners.peek() >= this.currentNode.getParent().getNumberOfChildren()) {
-            this.atEnd = true;
+        if (this.atEnd())
             return;
-        }
 
         this.currentNode = this.currentNode.getParent().getChildByIndex(currentPoiners.peek());
     }
@@ -79,7 +69,7 @@ public class TrieIterator<T extends Comparable> implements LeapFrogIterator<T>, 
      */
     @Override
     public boolean atEnd() {
-        return this.atEnd;
+        return this.currentPoiners.peek() >= this.currentNode.getParent().getNumberOfChildren();
     }
 
     /**
