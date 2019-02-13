@@ -19,7 +19,6 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
     private LeapFrogJoin[] leapfrogJoins;
 
     private Stack<T> currentKeysStack = new Stack<>();
-    private List<Map<String, T>> cumulativeResult;
 
     /**
      * Bootstraps LFTJ.
@@ -69,7 +68,6 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
         // At this point variables ordering is taken directly from the query. According to the paper, ordering
         // influences significantly the average execution time, but is irrelevant for worst cases.
         // This is the place where variables ordering optimization should take place.
-
         this.variables = buckets.keySet().toArray(new String[0]);
 
         // Prepare an array of leapfrogJoins - size = number of variables
@@ -157,7 +155,8 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
 
         leapfrogJoins[depth].leapfrogInit();
 
-        this.currentKeysStack.add(key());
+        currentKeysStack.push(key());
+
     }
 
     public void up() throws Exception {
@@ -180,48 +179,67 @@ public class LeapFrogTrieJoin<T extends Comparable> implements Algorithm<T> {
     @SuppressWarnings("all")
     public List<Map<String, T>> run() throws Exception {
 
+        // reset all
+        List<Map<String, T>> cumulativeResult = new ArrayList<>();
+        currentKeysStack = new Stack<>();
+
+        while (!allIteratorsAtEnd()) {
+
+            digDown();
+
+            // iterate throug current results
+            while (!atEnd()) {
+
+                // iterate through stack and add results to cumulativeResult
+
+                Map<String, T> result = new HashMap<>();
+                for (int i = 0; i < currentKeysStack.size(); i++) {
+                    result.put(variables[i], currentKeysStack.get(i));
+                }
+
+                cumulativeResult.add(result);
+
+                // proceed to next
+                next();
+            }
+
+            jumpOver();
+        }
+
+
+        return cumulativeResult;
+    }
+
+    private boolean allIteratorsAtEnd() {
+        for (int i = 0; i < variables.length; i++) {
+            if (!leapfrogJoins[i].isAtEnd()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean digDown() throws Exception {
         while (depth < maxDepth()) {
             open();
         }
+        return depth == maxDepth();
+    }
 
-        System.out.println("OPEN");
-        System.out.println(currentKeysStack);
-        System.out.println("AtEnd: " + atEnd());
-
-        next();
-        System.out.println("NEXT");
-        System.out.println("AtEnd: " + atEnd());
-        System.out.println(currentKeysStack);
-
-        up();
-        System.out.println("UP");
-        System.out.println("AtEnd: " + atEnd());
-        System.out.println(currentKeysStack);
-
-        next();
-        System.out.println("NEXT");
-        System.out.println("AtEnd: " + atEnd());
-        System.out.println(currentKeysStack);
-
-        up();
-        System.out.println("UP");
-        System.out.println("AtEnd: " + atEnd());
-        System.out.println(currentKeysStack);
-
-        next();
-        System.out.println("NEXT");
-        System.out.println("AtEnd: " + atEnd());
-        System.out.println(currentKeysStack);
-
-//        open();
-//        System.out.println("AtEnd: " + atEnd());
-
-
-
-//        System.out.println(currentKeysStack);
-
-
-        return null;
+    private boolean jumpOver() throws Exception {
+        if (depth > 0) {
+            this.up();
+            next();
+            if (!atEnd()) {
+                while (depth < maxDepth()) {
+                    open();
+                }
+                return true;
+            } else {
+                jumpOver();
+            }
+        }
+        return false;
     }
 }
 
