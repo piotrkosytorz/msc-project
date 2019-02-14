@@ -1,5 +1,7 @@
 import algorithms.lftj.LeapFrogTrieJoin;
-import algorithms.nestedloop.NestedLoopJoin;
+import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
+import algorithms.nestedloop.NestedLoopJoinBulkQueryResolver;
+import algorithms.nestedloop.NestedLoopJoinQueryResolver;
 import query.Atom;
 import query.Query;
 import query.Relation;
@@ -57,7 +59,7 @@ public class Main {
 
         try {
             startTime = System.currentTimeMillis();
-            res = query.resolve(new NestedLoopJoin());
+            res = query.resolve(new NestedLoopJoinBulkQueryResolver());
             endTime = System.currentTimeMillis();
             System.out.println("Nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
             System.out.println("Nested loop result: \n\t" + res);
@@ -69,7 +71,7 @@ public class Main {
 
 //        try {
         startTime = System.currentTimeMillis();
-        res = query.resolve(new LeapFrogTrieJoin());
+        res = query.resolve(new LeapFrogTrieJoinQueryResolver());
         endTime = System.currentTimeMillis();
 
         System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");

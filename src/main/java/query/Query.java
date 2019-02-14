@@ -1,6 +1,6 @@
 package query;
 
-import algorithms.Algorithm;
+import algorithms.QueryResolver;
 
 import java.util.List;
 import java.util.Map;
@@ -21,9 +21,8 @@ public class Query<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Map<String, T>> resolve(Algorithm algorithm) throws Exception {
-        algorithm.prepareQuery(this);
-        return algorithm.run();
+    public List<Map<String, T>> resolve(QueryResolver queryResolver) throws Exception {
+        return queryResolver.getFullResult(this);
     }
 
     public Atom[] getAtoms() {
