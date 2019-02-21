@@ -5,6 +5,8 @@ import org.junit.Test;
 import query.Relation;
 import query.Tuple;
 
+import static org.junit.Assert.*;
+
 public class TrieRelationTest {
     @Test
     public void relationImportTest() {
@@ -25,9 +27,9 @@ public class TrieRelationTest {
 
         TrieRelation<Integer> trieRelation = new TrieRelation<>(relR);
 
-        trieRelation.print();
+//        trieRelation.print();
 
-        //assertEquals(elements, elements2);
+//        assertEquals(elements, elements2);
 
     }
 

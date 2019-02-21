@@ -9,16 +9,6 @@ import java.util.*;
 public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements QueryResolver<T>, QueryResolverIterator<T> {
 
     @Override
-    public QueryResolverIterator<T> getQueryResolverIterator(Query query) {
-
-//        LeapFrogTrieJoin<T> leapFrogTrieJoin = new LeapFrogTrieJoin<>();
-//        leapFrogTrieJoin.bootstrap(query.getAtoms());
-
-        return null;
-
-    }
-
-    @Override
     public List<Map<String, T>> getFullResult(Query query) throws Exception {
 
         LeapFrogTrieJoin<T> leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
@@ -54,6 +44,21 @@ public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements Quer
 
 
         return cumulativeResult;
+    }
+
+    @Override
+    public Iterator<Map<String, T>> getIterator(Query query) {
+        return new Iterator<Map<String, T>>() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public Map<String, T> next() {
+                return null;
+            }
+        };
     }
 
     private boolean allIteratorsAtEnd(LeapFrogTrieJoin leapFrogTrieJoin) {

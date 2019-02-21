@@ -1,13 +1,20 @@
 package nestedloop;
 
-import algorithms.nestedloop.IterativeNestedLoopJoin;
+import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
 import org.junit.Test;
 import query.Atom;
 import query.Query;
 import query.Relation;
 import query.Tuple;
 
-public class NestedLoopTest {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+
+public class IterativeNestedLoopIteratorTest {
 
     Relation<Integer> relR = new Relation<>(2);
     Relation<Integer> relS = new Relation<>(2);
@@ -15,7 +22,7 @@ public class NestedLoopTest {
 
     Query<Integer> query;
 
-    public NestedLoopTest() {
+    public IterativeNestedLoopIteratorTest() {
 
 
         relR.addAll(
@@ -55,18 +62,19 @@ public class NestedLoopTest {
     }
 
     @Test
-    public void nestedLoopTest() {
+    public void iteratorTest() {
 
-        IterativeNestedLoopJoin iterativeNestedLoopJoin = new IterativeNestedLoopJoin(query);
+        IterativeNestedLoopJoinQueryResolver resolver = new IterativeNestedLoopJoinQueryResolver();
 
-        boolean atEnd = false;
+        Iterator<Map> iterator = resolver.getIterator(query);
 
-        while(!atEnd) {
-            atEnd = iterativeNestedLoopJoin.moveOneForward();
-            iterativeNestedLoopJoin.getResultOrNull();
-//            System.out.println(iterativeNestedLoopJoin.getCurrentResult() + " : " + iterativeNestedLoopJoin.getResultOrNull());
+        List<Map<String, Integer>> results = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            results.add(iterator.next());
         }
 
-    }
+        assertEquals(results.size(), 7);
 
+    }
 }

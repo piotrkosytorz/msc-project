@@ -1,7 +1,6 @@
 package algorithms.nestedloop;
 
 import algorithms.QueryResolver;
-import algorithms.QueryResolverIterator;
 import com.sun.tools.javac.util.Pair;
 import query.Atom;
 import query.Query;

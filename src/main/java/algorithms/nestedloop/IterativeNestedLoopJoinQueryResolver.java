@@ -5,6 +5,7 @@ import algorithms.QueryResolverIterator;
 import query.Query;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +18,6 @@ import java.util.Map;
  * @param <T>
  */
 public class IterativeNestedLoopJoinQueryResolver<T extends Comparable> implements QueryResolver<T>, QueryResolverIterator<T> {
-
-    @Override
-    public QueryResolverIterator<T> getQueryResolverIterator(Query query) {
-        return null;
-    }
 
     @Override
     public List<Map<String, T>> getFullResult(Query query) {
@@ -40,5 +36,37 @@ public class IterativeNestedLoopJoinQueryResolver<T extends Comparable> implemen
         }
 
         return cumulativeResult;
+    }
+
+    @Override
+    public Iterator<Map<String, T>> getIterator(Query query) {
+
+        return new Iterator<Map<String, T>>() {
+
+            IterativeNestedLoopJoin nestedLoopJoin = new IterativeNestedLoopJoin(query);
+            Map<String, T> nextResult = null;
+
+            @Override
+            public boolean hasNext() {
+
+                boolean atEnd = false;
+
+                while (!atEnd) {
+                    atEnd = nestedLoopJoin.moveOneForward();
+                    Map<String, T> result = nestedLoopJoin.getResultOrNull();
+                    if (result != null) {
+                        nextResult = result;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public Map<String, T> next() {
+                return nextResult;
+            }
+        };
     }
 }
