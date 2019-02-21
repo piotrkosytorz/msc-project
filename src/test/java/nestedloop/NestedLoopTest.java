@@ -1,16 +1,16 @@
-package lftj;
+package nestedloop;
 
-import algorithms.lftj.LeapFrogTrieJoin;
+import algorithms.nestedloop.IterativeNestedLoopJoin;
 import org.junit.Test;
 import query.Atom;
 import query.Query;
 import query.Relation;
 import query.Tuple;
 
-public class LeapFrogTrieJoinTest {
+public class NestedLoopTest {
 
     @Test
-    public void stepByStepTest() {
+    public void nestedLoopTest() {
 
         Relation<Integer> relR = new Relation<>(2);
         Relation<Integer> relS = new Relation<>(2);
@@ -51,16 +51,16 @@ public class LeapFrogTrieJoinTest {
                 new Atom<>(relT, "a", "c")
         );
 
-        LeapFrogTrieJoin<Integer> leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
+        IterativeNestedLoopJoin iterativeNestedLoopJoin = new IterativeNestedLoopJoin(query);
 
-        try {
+        boolean atEnd = false;
 
-            leapFrogTrieJoin.open();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        while(!atEnd) {
+            atEnd = iterativeNestedLoopJoin.moveOneForward();
+            iterativeNestedLoopJoin.getResultOrNull();
+//            System.out.println(iterativeNestedLoopJoin.getCurrentResult() + " : " + iterativeNestedLoopJoin.getResultOrNull());
         }
 
-        System.out.println("end");
     }
+
 }

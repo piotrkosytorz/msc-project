@@ -1,7 +1,6 @@
-import algorithms.lftj.LeapFrogTrieJoin;
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
-import algorithms.nestedloop.NestedLoopJoinBulkQueryResolver;
-import algorithms.nestedloop.NestedLoopJoinQueryResolver;
+import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
+import algorithms.nestedloop.RecursiveNestedLoopJoinQueryResolver;
 import query.Atom;
 import query.Query;
 import query.Relation;
@@ -59,26 +58,39 @@ public class Main {
 
         try {
             startTime = System.currentTimeMillis();
-            res = query.resolve(new NestedLoopJoinBulkQueryResolver());
+            res = query.resolve(new RecursiveNestedLoopJoinQueryResolver());
             endTime = System.currentTimeMillis();
-            System.out.println("Nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
-            System.out.println("Nested loop result: \n\t" + res);
+            System.out.println("Recursive nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
+            System.out.println("Recursive nested loop result: \n\t" + res);
         } catch (Exception e) {
-            System.out.println("Nested loop fail!: \n\t" + e.getLocalizedMessage());
+            System.out.println("Recursive nested loop fail!: \n\t" + e.getLocalizedMessage());
         }
 
         System.out.println("\n======================================\n");
 
-//        try {
+        try {
+            startTime = System.currentTimeMillis();
+            res = query.resolve(new IterativeNestedLoopJoinQueryResolver());
+            endTime = System.currentTimeMillis();
+            System.out.println("Iterative nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
+            System.out.println("Iterative nested loop result: \n\t" + res);
+        } catch (Exception e) {
+            System.out.println("Iterative nested loop fail!: \n\t" + e.getLocalizedMessage());
+        }
+
+        System.out.println("\n======================================\n");
+
+
+        try {
         startTime = System.currentTimeMillis();
         res = query.resolve(new LeapFrogTrieJoinQueryResolver());
         endTime = System.currentTimeMillis();
 
         System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");
         System.out.println("LFTJ result: \n\t" + res);
-//        } catch (Exception e) {
-//            System.out.println("LFTJ fail!: \n\t" + e.getLocalizedMessage());
-//        }
+        } catch (Exception e) {
+            System.out.println("LFTJ fail!: \n\t" + e.getLocalizedMessage());
+        }
     }
 
 }

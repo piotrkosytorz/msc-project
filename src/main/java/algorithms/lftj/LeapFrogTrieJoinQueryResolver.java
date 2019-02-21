@@ -6,7 +6,7 @@ import query.Query;
 
 import java.util.*;
 
-public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements QueryResolver<T> {
+public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements QueryResolver<T>, QueryResolverIterator<T> {
 
     @Override
     public QueryResolverIterator<T> getQueryResolverIterator(Query query) {
@@ -21,8 +21,7 @@ public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements Quer
     @Override
     public List<Map<String, T>> getFullResult(Query query) throws Exception {
 
-        LeapFrogTrieJoin<T> leapFrogTrieJoin = new LeapFrogTrieJoin<>();
-        leapFrogTrieJoin.bootstrap(query.getAtoms());
+        LeapFrogTrieJoin<T> leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
 
         // reset all
         List<Map<String, T>> cumulativeResult = new ArrayList<>();

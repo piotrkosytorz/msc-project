@@ -11,14 +11,14 @@ import query.Tuple;
 import java.util.*;
 
 /**
- * class NestedLoopJoinBulkQueryResolver
+ * class RecursiveNestedLoopJoinQueryResolver
  * <p>
  * Nested loop join implementation according to the Algorithm interface.
  * The result is a list of join results, where a join result is a list of pairs [matched variable name : value]
  *
  * @param <T>
  */
-public class NestedLoopJoinBulkQueryResolver<T> implements QueryResolver<T> {
+public class RecursiveNestedLoopJoinQueryResolver<T> implements QueryResolver<T> {
 
     private Relation[] relations;
     private HashMap<String, List<Pair<Relation, Integer>>> relationsEqualityMap = new HashMap<>();
@@ -52,7 +52,7 @@ public class NestedLoopJoinBulkQueryResolver<T> implements QueryResolver<T> {
 
         }
 
-        // for not known reason, Java doesn't want to cast the whole list, so I have to do it one by one.
+        // Casting Set to array
         relations = new Relation[rSet.size()];
         int i = 0;
         for (Relation r : rSet) {
@@ -115,11 +115,6 @@ public class NestedLoopJoinBulkQueryResolver<T> implements QueryResolver<T> {
         }
 
         return results;
-    }
-
-    @Override
-    public QueryResolverIterator<T> getQueryResolverIterator(Query query) {
-        return null;
     }
 
     @Override

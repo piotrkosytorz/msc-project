@@ -4,6 +4,7 @@ import algorithms.lftj.datasctructures.Trie.TrieRelation;
 import algorithms.lftj.iterators.LeapFrogIterator;
 import algorithms.lftj.iterators.TrieIterator;
 import query.Atom;
+import query.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,14 @@ public class LeapFrogTrieJoin<T extends Comparable> {
 
     // Stack of pointers to currently available part of the full solution tuple
     public Stack<T> currentKeysStack = new Stack<>();
+
+    /**
+     * LeapFrog Trie-Join Constructor
+     * @param query
+     */
+    public LeapFrogTrieJoin(Query query) {
+        this.bootstrap(query.getAtoms());
+    }
 
     /**
      * Bootstraps LFTJ.
@@ -45,7 +54,7 @@ public class LeapFrogTrieJoin<T extends Comparable> {
      *
      * @param atoms
      */
-    public void bootstrap(Atom[] atoms) {
+    private void bootstrap(Atom[] atoms) {
 
         // I decided to sort the query in buckets of variables with relations referenced to them:
         HashMap<String, List<TrieRelation>> buckets = new HashMap<>();

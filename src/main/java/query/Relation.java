@@ -67,4 +67,7 @@ public class Relation<T extends Comparable<T>> implements Iterable<T> {
         return elements.iterator();
     }
 
+    public Integer size() {
+        return elements.size();
+    }
 }
