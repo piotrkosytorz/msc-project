@@ -9,10 +9,10 @@ import java.util.*;
  *
  * @param <T>
  */
-public class Relation<T extends Comparable<T>> implements Iterable<T> {
+public class Relation<T extends Comparable<T>> implements Iterable<T>, Cloneable {
 
-    private List<T> elements;
-    private Integer arity;
+    public ArrayList<T> elements;
+    public Integer arity;
 
     public Relation(Integer arity) {
         this.arity = arity;
@@ -69,5 +69,14 @@ public class Relation<T extends Comparable<T>> implements Iterable<T> {
 
     public Integer size() {
         return elements.size();
+    }
+
+    public Relation clone() throws CloneNotSupportedException {
+
+        Relation clonedObj = (Relation) super.clone();
+        clonedObj.elements = (ArrayList) this.elements.clone();
+        clonedObj.arity = new Integer(this.arity);
+        return clonedObj;
+
     }
 }

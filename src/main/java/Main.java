@@ -61,8 +61,8 @@ public class Main {
 
         startTime = System.currentTimeMillis();
         Relation<Integer> relA = DataImporter.importFromFile(path);
-        Relation<Integer> relB = DataImporter.importFromFile(path);
-        Relation<Integer> relC = DataImporter.importFromFile(path);
+        Relation<Integer> relB = relA.clone();
+        Relation<Integer> relC = relB.clone();
         endTime = System.currentTimeMillis();
 
         System.out.println("Importers execution time: \n\t" + (endTime - startTime) + "ms\n");
