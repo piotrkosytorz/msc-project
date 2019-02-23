@@ -15,7 +15,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      * The leapfrog-init method is provided an array of iterators; it ensures the iterators are sorted according
      * to the key at which they are positioned, an invariant that is maintained throughout.
      *
-     * @param iterators
+     * @param iterators List of Leap Frog Iterators
      */
     public LeapFrogJoin(LeapFrogIterator<T>[] iterators) {
         this.iterators = iterators;
@@ -74,7 +74,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      * </pre>
      */
 
-    public void leapfrogSearch() {
+    private void leapfrogSearch() {
 
         int k = this.iterators.length;
         T x1 = (T) this.iterators[signedMod(this.p - 1, k)].key();

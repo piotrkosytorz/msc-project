@@ -11,7 +11,7 @@ public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements Quer
     @Override
     public List<Map<String, T>> getFullResult(Query query) throws Exception {
 
-        LeapFrogTrieJoin<T> leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
+        LeapFrogTrieJoin leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
 
         // reset all
         List<Map<String, T>> cumulativeResult = new ArrayList<>();
@@ -29,7 +29,7 @@ public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements Quer
                 //  currentKeysStack to cumulative hash stack conversion
                 Map<String, T> result = new HashMap<>();
                 for (int i = 0; i < leapFrogTrieJoin.currentKeysStack.size(); i++) {
-                    result.put(leapFrogTrieJoin.variables[i], leapFrogTrieJoin.currentKeysStack.get(i));
+                    result.put(leapFrogTrieJoin.variables[i], (T) leapFrogTrieJoin.currentKeysStack.get(i));
                 }
 
                 cumulativeResult.add(result);
@@ -70,11 +70,10 @@ public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements Quer
         return true;
     }
 
-    private boolean digDown(LeapFrogTrieJoin leapFrogTrieJoin) throws Exception {
+    private void digDown(LeapFrogTrieJoin leapFrogTrieJoin) throws Exception {
         while (leapFrogTrieJoin.depth < leapFrogTrieJoin.maxDepth()) {
             leapFrogTrieJoin.open();
         }
-        return leapFrogTrieJoin.depth == leapFrogTrieJoin.maxDepth();
     }
 
     private boolean jumpOver(LeapFrogTrieJoin leapFrogTrieJoin) throws Exception {

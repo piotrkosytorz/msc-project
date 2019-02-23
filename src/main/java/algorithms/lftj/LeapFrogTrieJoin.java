@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-public class LeapFrogTrieJoin<T extends Comparable> {
+public class LeapFrogTrieJoin<T extends Comparable<T>> {
 
     // The triejoin uses a variable depth to track the current variable for which a binding is being sought; initially
     // depth = -1 to indicate the triejoin is positioned at the root of the binding trie. (see the paper)
@@ -137,14 +137,14 @@ public class LeapFrogTrieJoin<T extends Comparable> {
         this.currentKeysStack.push(key());
     }
 
-    /**
-     * Seeks value (single value) at current depth
-     *
-     * @param seekKey
-     */
-    public void seek(T seekKey) {
-        this.leapfrogJoins[this.depth].leapfrogSeek(seekKey);
-    }
+//    /**
+//     * Seeks value (single value) at current depth
+//     *
+//     * @param seekKey
+//     */
+//    public void seek(T seekKey) {
+//        this.leapfrogJoins[this.depth].leapfrogSeek(seekKey);
+//    }
 
     /**
      * Opens the next level
