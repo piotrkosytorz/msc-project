@@ -134,6 +134,7 @@ public class Main {
 //            System.out.println("LFTJ result: \n\t" + res);
         } catch (Exception e) {
             System.out.println("LFTJ fail!: \n\t" + e.getLocalizedMessage());
+            System.out.println(e.getStackTrace());
         }
 
     }
