@@ -1,6 +1,13 @@
 apply plugin: 'java'
-compileJava {options.encoding = "UTF-8"}
-compileTestJava {options.encoding = "UTF-8"}
+compileJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+compileTestJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
 
 apply plugin: 'application'
 
@@ -39,10 +46,3 @@ task wrapper(type: Wrapper) {
 
 
 
-allprojects {
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-        }
-    }
-}
