@@ -1,4 +1,6 @@
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
+import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
+import algorithms.nestedloop.RecursiveNestedLoopJoinQueryResolver;
 import managers.DataManager;
 import query.Atom;
 import query.Query;
@@ -99,30 +101,30 @@ public class Main {
         List<Map<String, Integer>> res;
 
 
-//        try {
-//            startTime = System.currentTimeMillis();
-//            res = query.resolve(new RecursiveNestedLoopJoinQueryResolver());
-//            endTime = System.currentTimeMillis();
-//            System.out.println("Recursive nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
-//            System.out.println("Recursive nested loop result: \n\t" + res);
-//        } catch (Exception e) {
-//            System.out.println("Recursive nested loop fail!: \n\t" + e.getLocalizedMessage());
-//        }
-//
-//        System.out.println("\n======================================\n");
+        try {
+            startTime = System.currentTimeMillis();
+            res = query.resolve(new RecursiveNestedLoopJoinQueryResolver());
+            endTime = System.currentTimeMillis();
+            System.out.println("Recursive nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
+            System.out.println("Recursive nested loop result: \n\t" + res);
+        } catch (Exception e) {
+            System.out.println("Recursive nested loop fail!: \n\t" + e.getLocalizedMessage());
+        }
 
-//        try {
-//            startTime = System.currentTimeMillis();
-//            res = query.resolve(new IterativeNestedLoopJoinQueryResolver());
-//            endTime = System.currentTimeMillis();
-//            System.out.println("Iterative nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
-//            System.out.println("Iterative nested loop result: \n\t" + res);
-//        } catch (Exception e) {
-//            System.out.println("Iterative nested loop fail!: \n\t" + e.getLocalizedMessage());
-//        }
-//
-//        System.out.println("\n======================================\n");
-//
+        System.out.println("\n======================================\n");
+
+        try {
+            startTime = System.currentTimeMillis();
+            res = query.resolve(new IterativeNestedLoopJoinQueryResolver());
+            endTime = System.currentTimeMillis();
+            System.out.println("Iterative nested loop total execution time: \n\t" + (endTime - startTime) + "ms\n");
+            System.out.println("Iterative nested loop result: \n\t" + res);
+        } catch (Exception e) {
+            System.out.println("Iterative nested loop fail!: \n\t" + e.getLocalizedMessage());
+        }
+
+        System.out.println("\n======================================\n");
+
 
         try {
             startTime = System.currentTimeMillis();
