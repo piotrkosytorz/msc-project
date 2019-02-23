@@ -73,7 +73,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      *       p := p + 1 mod k;
      * </pre>
      */
-    @SuppressWarnings("all")
+
     public void leapfrogSearch() {
 
         int k = this.iterators.length;
@@ -133,7 +133,6 @@ public class LeapFrogJoin<T extends Comparable<T>> {
      *   leapfrog-search();
      * </pre>
      */
-    @SuppressWarnings("unchecked")
     public void leapfrogSeek(T seekKey) {
 
         int k = this.iterators.length;
