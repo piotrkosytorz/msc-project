@@ -1,5 +1,5 @@
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
-import dataimporters.DataImporter;
+import managers.DataManager;
 import query.Atom;
 import query.Query;
 import query.Relation;
@@ -58,14 +58,34 @@ public class Main {
         long startTime;
         long endTime;
 
+        // data import
 
         startTime = System.currentTimeMillis();
-        Relation<Integer> relA = DataImporter.importFromFile(path);
+        List<String[]> dataArray = DataManager.importFromFile(path);
+        endTime = System.currentTimeMillis();
+        System.out.println("File import time " + (endTime - startTime) + "ms\n");
+
+        // conversion to relations
+
+        long importersStartTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
+        Relation<Integer> relA = DataManager.convertToIntegerRelation(dataArray);
+        endTime = System.currentTimeMillis();
+        System.out.println("Data converted " + (endTime - startTime) + "ms\n");
+
+        startTime = System.currentTimeMillis();
         Relation<Integer> relB = relA.clone();
+        endTime = System.currentTimeMillis();
+
+        System.out.println("Rel cloned: " + (endTime - startTime) + "ms\n");
+
+        startTime = System.currentTimeMillis();
         Relation<Integer> relC = relB.clone();
         endTime = System.currentTimeMillis();
 
-        System.out.println("Importers execution time: \n\t" + (endTime - startTime) + "ms\n");
+        System.out.println("Rel cloned: " + (endTime - startTime) + "ms\n");
+
+        System.out.println("Importers execution time: \n\t" + (endTime - importersStartTime) + "ms\n");
 
         startTime = System.currentTimeMillis();
         Query<Integer> query = new Query<>(
@@ -77,7 +97,6 @@ public class Main {
         System.out.println("Query builder time: \n\t" + (endTime - startTime) + "ms\n");
 
         List<Map<String, Integer>> res;
-
 
 
 //        try {
