@@ -1,7 +1,6 @@
 package main;
 
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
-import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
 import managers.DataManager;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -19,9 +18,9 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 1)
-public class BenchmarkRunner {
+public class BenchmarkRunner2 {
 
-    @Param({"10", "50", "150", "200", "250", "300", "350", "400", "450", "500"})
+    @Param({"10", "10000", "10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -56,9 +55,4 @@ public class BenchmarkRunner {
         bh.consume(res);
     }
 
-    @Benchmark
-    public void nestedLoopJoin(Blackhole bh) throws Exception {
-        List<Map<String, Integer>> res = query.resolve(new IterativeNestedLoopJoinQueryResolver());
-        bh.consume(res);
-    }
 }
