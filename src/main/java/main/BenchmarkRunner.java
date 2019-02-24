@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-Xms2G", "-Xmx2G"})
+@Fork(value = 1)
 public class BenchmarkRunner {
 
     @Param({"10", "20", "30", "50", "100"}) //, "700", "2000", "5000", "20000", "50000", "100000"})
