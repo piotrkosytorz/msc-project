@@ -5,8 +5,6 @@ import org.junit.Test;
 import query.Relation;
 import query.Tuple;
 
-import static org.junit.Assert.*;
-
 public class TrieRelationTest {
     @Test
     public void relationImportTest() {
