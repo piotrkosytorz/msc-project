@@ -1,6 +1,6 @@
 package algorithms.nestedloop;
 
-import com.sun.tools.javac.util.Pair;
+import javafx.util.Pair;
 import query.Atom;
 import query.Query;
 import query.Relation;
@@ -80,8 +80,8 @@ public class IterativeNestedLoopJoin<T extends Comparable<T>> {
             for (Object item : list) {
 
                 Pair relationPosition = (Pair<Relation, Integer>) item;
-                Relation r = (Relation) relationPosition.fst;
-                Integer p = (Integer) relationPosition.snd;
+                Relation r = (Relation) relationPosition.getKey();
+                Integer p = (Integer) relationPosition.getValue();
 
                 Integer relationIndex = relationIndexInRelationsList.get(r);
                 Tuple t = (Tuple) r.getElements().get(positions[relationIndex]);

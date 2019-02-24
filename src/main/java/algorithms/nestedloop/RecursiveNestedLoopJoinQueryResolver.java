@@ -1,7 +1,7 @@
 package algorithms.nestedloop;
 
 import algorithms.QueryResolver;
-import com.sun.tools.javac.util.Pair;
+import javafx.util.Pair;
 import query.Atom;
 import query.Query;
 import query.Relation;
@@ -98,13 +98,13 @@ public class RecursiveNestedLoopJoinQueryResolver<T> implements QueryResolver<T>
             for (Pair conditionPair : variableConditions.getValue()) {
 
                 for (Pair actualPair : this.actualTuples) {
-                    if (conditionPair.fst.equals(actualPair.fst)) {         // the same relation
+                    if (conditionPair.getKey().equals(actualPair.getKey())) {         // the same relation
 
-                        Tuple t = (Tuple) actualPair.snd;
+                        Tuple t = (Tuple) actualPair.getValue();
 
                         if (actualValue == null) {
-                            actualValue = (T) t.get((Integer) conditionPair.snd);
-                        } else if (!t.get((Integer) conditionPair.snd).equals(actualValue)) {
+                            actualValue = (T) t.get((Integer) conditionPair.getValue());
+                        } else if (!t.get((Integer) conditionPair.getValue()).equals(actualValue)) {
                             return null;
                         }
                     }
