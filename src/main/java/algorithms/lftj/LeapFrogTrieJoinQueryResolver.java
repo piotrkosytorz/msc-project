@@ -8,10 +8,17 @@ import java.util.*;
 
 public class LeapFrogTrieJoinQueryResolver<T extends Comparable> implements QueryResolver<T>, QueryResolverIterator<T> {
 
-    @Override
-    public List<Map<String, T>> getFullResult(Query query) throws Exception {
+    private LeapFrogTrieJoin leapFrogTrieJoin;
 
-        LeapFrogTrieJoin leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
+    @Override
+    public void bootstrap(Query query) {
+        // bootstrap (and indexing)
+        leapFrogTrieJoin = new LeapFrogTrieJoin<>(query);
+    }
+
+    @Override
+    public List<Map<String, T>> getFullResult() throws Exception {
+
 
         // reset all
         List<Map<String, T>> cumulativeResult = new ArrayList<>();

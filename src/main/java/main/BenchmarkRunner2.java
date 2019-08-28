@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 public class BenchmarkRunner2 {
 
-    @Param({"10", "10000", "10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
+    @Param({"10", "10000", "10000" /* , "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000" */})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -51,7 +51,12 @@ public class BenchmarkRunner2 {
 
     @Benchmark
     public void leapFrogTrieJoin(Blackhole bh) throws Exception {
-        List<Map<String, Integer>> res = query.resolve(new LeapFrogTrieJoinQueryResolver());
+
+        // bootstrap
+        query.bootstrap(new LeapFrogTrieJoinQueryResolver());
+        // resolve
+        List<Map<String, Integer>> res = query.resolve();
+
         bh.consume(res);
     }
 

@@ -24,7 +24,8 @@ public class RecursiveNestedLoopJoinQueryResolver<T> implements QueryResolver<T>
     private Stack<Pair<Relation, Tuple>> actualTuples = new Stack<>();
     private List<Map<String, T>> cumulativeResult;
 
-    public void prepareQuery(Query query) {
+    @Override
+    public void bootstrap(Query query) {
 
         cumulativeResult = new ArrayList<>();
 
@@ -117,8 +118,8 @@ public class RecursiveNestedLoopJoinQueryResolver<T> implements QueryResolver<T>
     }
 
     @Override
-    public List<Map<String, T>> getFullResult(Query query) throws Exception {
-        this.prepareQuery(query);
+    public List<Map<String, T>> getFullResult() throws Exception {
+
         int depth = 0;                  // starting at 0
         nestedLoop(relations, depth);   // recursion
 

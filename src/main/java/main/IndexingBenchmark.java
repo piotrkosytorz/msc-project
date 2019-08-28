@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 1)
-public class BenchmarkRunner {
+public class IndexingBenchmark {
 
     @Param({"10", "50", "150" /*, "200", "250", "300", "350", "400", "450", "500" */})
     private int N;
@@ -51,25 +51,18 @@ public class BenchmarkRunner {
     }
 
     @Benchmark
-    public void LFTJ_join(Blackhole bh) throws Exception {
+    public void LFTJ_bootstrap(Blackhole bh) throws Exception {
 
         // bootstrap
         query.bootstrap(new LeapFrogTrieJoinQueryResolver());
-        // resolve
-        List<Map<String, Integer>> res = query.resolve();
 
-        bh.consume(res);
     }
 
     @Benchmark
-    public void nesed_loop_join(Blackhole bh) throws Exception {
+    public void nested_loop_bootstrap(Blackhole bh) throws Exception {
 
         // bootstrap
         query.bootstrap(new IterativeNestedLoopJoinQueryResolver());
-        // resolve
-        List<Map<String, Integer>> res = query.resolve();
-
-        bh.consume(res);
     }
 
 }

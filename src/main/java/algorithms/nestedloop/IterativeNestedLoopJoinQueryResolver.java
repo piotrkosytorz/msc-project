@@ -19,10 +19,16 @@ import java.util.Map;
  */
 public class IterativeNestedLoopJoinQueryResolver<T extends Comparable> implements QueryResolver<T>, QueryResolverIterator<T> {
 
-    @Override
-    public List<Map<String, T>> getFullResult(Query query) {
+    IterativeNestedLoopJoin nestedLoopJoin;
 
-        IterativeNestedLoopJoin nestedLoopJoin = new IterativeNestedLoopJoin(query);
+    @Override
+    public void bootstrap(Query query) {
+        nestedLoopJoin = new IterativeNestedLoopJoin(query);
+    }
+
+    @Override
+    public List<Map<String, T>> getFullResult() {
+
         List<Map<String, T>> cumulativeResult = new ArrayList<>();
 
         boolean atEnd = false;

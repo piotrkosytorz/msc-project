@@ -60,6 +60,7 @@ public class Main {
 
 
         long startTime;
+        long bootstrappingEndTime;
         long endTime;
 
         // data import
@@ -130,10 +131,13 @@ public class Main {
 
         try {
             startTime = System.currentTimeMillis();
-            res = query.resolve(new LeapFrogTrieJoinQueryResolver());
+            query.bootstrap(new LeapFrogTrieJoinQueryResolver());
+            bootstrappingEndTime = System.currentTimeMillis();
+            res = query.resolve();
             endTime = System.currentTimeMillis();
 
             System.out.println("LFTJ number of results: " + res.size());
+            System.out.println("LFTJ bootstraping time: \n\t" + (bootstrappingEndTime - startTime) + "ms\n");
             System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");
 //            System.out.println("LFTJ result: \n\t" + res);
         } catch (Exception e) {
