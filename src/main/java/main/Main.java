@@ -135,7 +135,7 @@ public class Main {
 
             System.out.println("LFTJ number of results: " + res.size());
             System.out.println("LFTJ total execution time: \n\t" + (endTime - startTime) + "ms\n");
-//            System.out.println("LFTJ result: \n\t" + res);
+
         } catch (Exception e) {
             System.out.println("LFTJ fail!: \n\t" + e.getLocalizedMessage());
             System.out.println(e.getStackTrace());

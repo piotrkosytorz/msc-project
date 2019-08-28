@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class LeapFrogJoin<T extends Comparable<T>> {
 
-    private LeapFrogIterator[] iterators;
+    private LeapFrogIterator<T>[] iterators;
     private boolean atEnd = false;
     private int p;
     private T key;
@@ -77,10 +77,10 @@ public class LeapFrogJoin<T extends Comparable<T>> {
     private void leapfrogSearch() {
 
         int k = this.iterators.length;
-        T x1 = (T) this.iterators[signedMod(this.p - 1, k)].key();
+        T x1 = this.iterators[signedMod(this.p - 1, k)].key();
 
         while (true) {
-            T x = (T) this.iterators[this.p].key();
+            T x = this.iterators[this.p].key();
 
             if (x.compareTo(x1) == 0) {
                 this.key = x;
@@ -91,7 +91,7 @@ public class LeapFrogJoin<T extends Comparable<T>> {
                     this.atEnd = true;
                     return;
                 } else {
-                    x1 = (T) iterators[this.p].key();
+                    x1 = iterators[this.p].key();
                     this.p = (this.p + 1) % k;
                 }
             }

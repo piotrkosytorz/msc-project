@@ -93,7 +93,7 @@ public class IterativeNestedLoopJoin<T extends Comparable<T>> {
 
                 } else {
 
-                    if (currentValue != (T) t.get(p)) {
+                    if (currentValue != t.get(p)) {
                         return null;
                     }
                 }

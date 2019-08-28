@@ -18,7 +18,7 @@ public class LeapFrogTrieJoin<T extends Comparable<T>> {
     public int depth = -1;
 
     public String[] variables;
-    public LeapFrogJoin[] leapfrogJoins;
+    public LeapFrogJoin<T>[] leapfrogJoins;
 
     // Stack of pointers to currently available part of the full solution tuple
     public Stack<T> currentKeysStack = new Stack<>();
@@ -27,7 +27,7 @@ public class LeapFrogTrieJoin<T extends Comparable<T>> {
      * LeapFrog Trie-Join Constructor
      * @param query
      */
-    public LeapFrogTrieJoin(Query query) {
+    public LeapFrogTrieJoin(Query<T> query) {
         this.bootstrap(query.getAtoms());
     }
 
@@ -54,12 +54,12 @@ public class LeapFrogTrieJoin<T extends Comparable<T>> {
      *
      * @param atoms
      */
-    private void bootstrap(Atom[] atoms) {
+    private void bootstrap(Atom<T>[] atoms) {
 
         // I decided to sort the query in buckets of variables with relations referenced to them:
         HashMap<String, List<TrieRelation>> buckets = new HashMap<>();
 
-        for (Atom atom : atoms) {
+        for (Atom<T> atom : atoms) {
             // convert to TrieRelation per atom:
             TrieRelation trieRelation = new TrieRelation<>(atom.getRelation());
 
@@ -114,7 +114,7 @@ public class LeapFrogTrieJoin<T extends Comparable<T>> {
      * @return Integer key
      */
     public T key() {
-        return (T) this.leapfrogJoins[this.depth].getKey();
+        return this.leapfrogJoins[this.depth].getKey();
     }
 
     /**
@@ -142,7 +142,7 @@ public class LeapFrogTrieJoin<T extends Comparable<T>> {
 //     *
 //     * @param seekKey
 //     */
-//    public void seek(T seekKey) {
+//    public void seek(T  seekKey) {
 //        this.leapfrogJoins[this.depth].leapfrogSeek(seekKey);
 //    }
 

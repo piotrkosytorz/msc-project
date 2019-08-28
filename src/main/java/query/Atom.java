@@ -19,7 +19,7 @@ public final class Atom<T extends Comparable<T>> {
         this.variables = variables;
     }
 
-    public Relation getRelation() {
+    public Relation<T> getRelation() {
         return relation;
     }
 

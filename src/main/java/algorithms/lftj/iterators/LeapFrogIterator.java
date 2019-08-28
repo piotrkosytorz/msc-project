@@ -7,12 +7,12 @@ public interface LeapFrogIterator<T> {
      *
      * @return T
      */
-    public T key();
+    T key();
 
     /**
      * Proceeds to the next key
      */
-    public void next();
+    void next();
 
     /**
      * Position the iterator at a least upper bound for seekKey, i.e. the least key ≥ seekKey, or move to
@@ -21,22 +21,22 @@ public interface LeapFrogIterator<T> {
      * @param seekKey
      * @return int
      */
-    public int seek(T seekKey);
+    int seek(T seekKey);
 
     /**
      * True when iterator is at the end
      *
      * @return bool
      */
-    public boolean atEnd();
+    boolean atEnd();
 
     /**
      * Opens iterator - only for tree iterators
      */
-    public void open() throws Exception;
+    void open() throws Exception;
 
     /**
      * Return to the parent key at the previous depth - only for tree iterators
      */
-    public void up() throws Exception;
+    void up() throws Exception;
 }
