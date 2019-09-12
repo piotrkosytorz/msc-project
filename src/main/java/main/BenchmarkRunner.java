@@ -2,7 +2,6 @@ package main;
 
 import algorithms.hashjoin.HashJoinQueryResolver;
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
-import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
 import managers.DataManager;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -22,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 public class BenchmarkRunner {
 
-    @Param({"10", "50", "150" /*, "200", "250", "300", "350", "400", "450", "500" */})
+    @Param({"10", "50", "150" , "200", "250", "300", "350", "400", "450", "500", "600", "700", "800", "900", "1000"})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -62,16 +61,16 @@ public class BenchmarkRunner {
         bh.consume(res);
     }
 
-    @Benchmark
-    public void nesed_loop_join(Blackhole bh) throws Exception {
-
-        // bootstrap
-        query.bootstrap(new IterativeNestedLoopJoinQueryResolver());
-        // resolve
-        List<Map<String, Integer>> res = query.resolve();
-
-        bh.consume(res);
-    }
+//    @Benchmark
+//    public void nesed_loop_join(Blackhole bh) throws Exception {
+//
+//        // bootstrap
+//        query.bootstrap(new IterativeNestedLoopJoinQueryResolver());
+//        // resolve
+//        List<Map<String, Integer>> res = query.resolve();
+//
+//        bh.consume(res);
+//    }
 
     @Benchmark
     public void nesed_loop_join2(Blackhole bh) throws Exception {

@@ -3,7 +3,6 @@ package main;
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
 import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
 import managers.DataManager;
-import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
 import query.Atom;
@@ -12,16 +11,14 @@ import query.Relation;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-@State(Scope.Benchmark)
-@Fork(value = 1)
+//@BenchmarkMode(Mode.AverageTime)
+//@OutputTimeUnit(TimeUnit.MILLISECONDS)
+//@State(Scope.Benchmark)
+//@Fork(value = 1)
 public class IndexingBenchmark {
 
-    @Param({"10", "50", "150" /*, "200", "250", "300", "350", "400", "450", "500" */})
+//    @Param({"10", "50", "150" /*, "200", "250", "300", "350", "400", "450", "500" */})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -37,7 +34,7 @@ public class IndexingBenchmark {
         org.openjdk.jmh.Main.main(args);
     }
 
-    @Setup
+//    @Setup
     public void setup() throws Exception {
         List<String[]> dataArray = DataManager.importFromFile(path).subList(0, N);
         relA = DataManager.convertToIntegerRelation(dataArray);
@@ -50,7 +47,7 @@ public class IndexingBenchmark {
         );
     }
 
-    @Benchmark
+//    @Benchmark
     public void LFTJ_bootstrap(Blackhole bh) throws Exception {
 
         // bootstrap
@@ -58,7 +55,7 @@ public class IndexingBenchmark {
 
     }
 
-    @Benchmark
+//    @Benchmark
     public void nested_loop_bootstrap(Blackhole bh) throws Exception {
 
         // bootstrap
