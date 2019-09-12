@@ -24,10 +24,7 @@ public class HashJoinQueryResolver<T extends Comparable> implements QueryResolve
     @Override
     public List<Map<String, T>> getFullResult() throws Exception {
         // cummulative result
-
-        this.reduce(this.query);
-
-        return null;
+        return this.compute(this.query);
     }
 
     /**
@@ -35,36 +32,41 @@ public class HashJoinQueryResolver<T extends Comparable> implements QueryResolve
      * @return
      * @throws Exception
      */
-    private Query reduce(Query query) throws Exception {
+    private List<Map<String, T>> compute(Query query) throws Exception {
 
-        Atom[] atoms = query.getAtoms();
+        while (query.getAtoms().length > 2) {
 
-        if (atoms.length >= 2) {
+            ArrayList<Atom> atoms = new ArrayList<>(Arrays.asList(query.getAtoms()));
 
-            for (int i = 1; i < atoms.length; i++) {
+            for (int i = 1; i < atoms.size(); i++) {
 
                 if (this.sharesAnElement(
-                        atoms[0].getVariables(),
-                        atoms[i].getVariables()
+                        atoms.get(0).getVariables(),
+                        atoms.get(i).getVariables()
                 )) {
                     // join the two and replace them by the query that has been returned
-                    List<Map<String, T>> partialResult = this.nestedLoopJoin(new Query(atoms[0], atoms[i]));
+                    List<Map<String, T>> partialResult = this.nestedLoopJoin(new Query(atoms.get(0), atoms.get(i)));
 
-                    Atom atom = this.resultToAtom(partialResult);
+                    atoms.remove(atoms.get(i));
+                    atoms.remove(atoms.get(0));
 
-                    System.out.println("yes");
-                } else {
-                    System.out.println("no");
+                    atoms.add(this.resultToAtom(partialResult));
+
+                    query = new Query(atoms.toArray(new Atom[0]));
+
                 }
             }
-
         }
 
-        return query;
+        // only 2 atoms in query
+
+        List<Atom> atoms = Arrays.asList(query.getAtoms());
+        List<Map<String, T>> res = this.nestedLoopJoin(new Query(atoms.get(0), atoms.get(1)));
+        return res;
     }
 
     /**
-     * Nested loop join for a query with 2 atoms and 1 join element
+     * Nested loop join for a query with 2 atoms (single loop)
      *
      * @param query
      * @return
@@ -73,18 +75,19 @@ public class HashJoinQueryResolver<T extends Comparable> implements QueryResolve
 
         Atom[] atoms = query.getAtoms();
 
-        String[] keys = this.getIntersecttionOfStrArray(
+        String[] keysThatMustMatch = this.getIntersecttionOfStrArray(
                 atoms[0].getVariables(),
                 atoms[1].getVariables()
         );
 
-        String[] diffKeys = this.getSymmetricDifferenceOfStrArrays(
+        String[] otherKeys = this.getSymmetricDifferenceOfStrArrays(
                 atoms[0].getVariables(),
                 atoms[1].getVariables()
         );
 
         List<String> variables0 = Arrays.asList(atoms[0].getVariables());
         List<String> variables1 = Arrays.asList(atoms[1].getVariables());
+
 
         List<Map<String, T>> results = new ArrayList<>();
 
@@ -95,27 +98,34 @@ public class HashJoinQueryResolver<T extends Comparable> implements QueryResolve
 
                 Map<String, T> partialResult = new HashMap<>();
 
-                // chack all keys
-                for (String key : keys) {
+
+                // check all keys
+                for (String key : keysThatMustMatch) {
 
                     if (((Tuple) tuple0).get(variables0.indexOf(key)).compareTo(((Tuple) tuple1).get(variables1.indexOf(key))) == 0) {
-                        partialResult.put(key, (T) ((Tuple) tuple0).get(variables0.indexOf(key)));
+
+                        if (!partialResult.containsKey(key)) {
+                            partialResult.put(key, (T) ((Tuple) tuple0).get(variables0.indexOf(key)));
+                        }
                     }
                 }
 
 
-                if (partialResult.size() > 0 && !results.contains(partialResult)) {
+                if (partialResult.size() == keysThatMustMatch.length) {
 
                     // adding the rest
-                    for (String key : diffKeys) {
+                    for (String key : otherKeys) {
                         if (variables0.contains(key)) {
                             partialResult.put(key, (T) ((Tuple) tuple0).get(variables0.indexOf(key)));
+
                         } else if (variables1.contains(key)) {
                             partialResult.put(key, (T) ((Tuple) tuple1).get(variables1.indexOf(key)));
                         }
                     }
 
-                    results.add(partialResult);
+                    if (!results.contains(partialResult)) {
+                        results.add(partialResult);
+                    }
 
                 }
             }
@@ -174,7 +184,7 @@ public class HashJoinQueryResolver<T extends Comparable> implements QueryResolve
 
         // note - the maps should be always sorted in the same way, so I'm skipping sorting here.
 
-        for (Map<String, T> element: result) {
+        for (Map<String, T> element : result) {
             relation.add(new Tuple(new ArrayList<T>(element.values())));
         }
 

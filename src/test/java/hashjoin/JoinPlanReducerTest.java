@@ -7,6 +7,9 @@ import query.Query;
 import query.Relation;
 import query.Tuple;
 
+import java.util.List;
+import java.util.Map;
+
 public class JoinPlanReducerTest {
 
     @Test
@@ -53,7 +56,10 @@ public class JoinPlanReducerTest {
 
         HashJoinQueryResolver resolver = new HashJoinQueryResolver<Integer>();
         resolver.bootstrap(query);
-        resolver.getFullResult();
+        List<Map<String, Integer>> result = resolver.getFullResult();
+
+        System.out.println(result);
+
     }
 
 }
