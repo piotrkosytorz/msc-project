@@ -1,6 +1,6 @@
 package main;
 
-import algorithms.hashjoin.HashJoinQueryResolver;
+import algorithms.joinplan.nestedloop.JoinPlanNestedLoopQueryResolver;
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
 import managers.DataManager;
 import org.openjdk.jmh.annotations.*;
@@ -76,7 +76,7 @@ public class BenchmarkRunner {
     public void nesed_loop_join2(Blackhole bh) throws Exception {
 
         // bootstrap
-        query.bootstrap(new HashJoinQueryResolver());
+        query.bootstrap(new JoinPlanNestedLoopQueryResolver());
         // resolve
         List<Map<String, Integer>> res = query.resolve();
 

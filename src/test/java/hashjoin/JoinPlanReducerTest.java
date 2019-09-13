@@ -1,6 +1,7 @@
 package hashjoin;
 
-import algorithms.hashjoin.HashJoinQueryResolver;
+import algorithms.QueryResolver;
+import algorithms.joinplan.hashjoin.HashJoinQueryResolver;
 import org.junit.Test;
 import query.Atom;
 import query.Query;
@@ -54,7 +55,7 @@ public class JoinPlanReducerTest {
                 new Atom<>(relT, "a", "c")
         );
 
-        HashJoinQueryResolver resolver = new HashJoinQueryResolver<Integer>();
+        QueryResolver resolver = new HashJoinQueryResolver();
         resolver.bootstrap(query);
         List<Map<String, Integer>> result = resolver.getFullResult();
 
