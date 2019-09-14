@@ -27,6 +27,13 @@ public final class SetOperationsOnStrArraysHelper {
         return CollectionUtils.disjunction(aSet, bSet).toArray(new String[0]);
     }
 
+    public static String[] getUnionOfStrArrays(String[] a, String[] b) {
+
+        Set<String> aSet = new HashSet<>(Arrays.asList(a));
+        Set<String> bSet = new HashSet<>(Arrays.asList(b));
+        return CollectionUtils.union(aSet, bSet).toArray(new String[0]);
+    }
+
     public static boolean sharesAnElement(String[] a, String[] b) {
         Set<String> bSet = new HashSet<>(Arrays.asList(b));
 
