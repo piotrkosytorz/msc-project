@@ -37,7 +37,6 @@ public class BinaryNestedLoopJoin<T extends Comparable> implements BinaryJoinAlg
 
                 Map<String, T> partialResult = new HashMap<>();
 
-
                 // check all keys
                 for (String key : keysThatMustMatch) {
 

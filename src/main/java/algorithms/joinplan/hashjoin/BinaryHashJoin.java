@@ -12,7 +12,7 @@ public class BinaryHashJoin<T extends Comparable> implements BinaryJoinAlgorithm
 
 
     @Override
-    public List<Map> executeJoin(Query query) {
+    public List<Map<String, T>> executeJoin(Query query) {
 
         Atom[] atoms = query.getAtoms();
 
@@ -62,20 +62,67 @@ public class BinaryHashJoin<T extends Comparable> implements BinaryJoinAlgorithm
             biggerRelationIndex = 0;
         }
 
+        int requredSize = SetOperationsOnStrArraysHelper.getUnionOfStrArrays(
+                atoms[biggerRelationIndex].getVariables(),
+                atoms[smallerRelationIndex].getVariables()
+        ).length;
+
         Map<String, List<Tuple>> map = new HashMap<>();
 
         for (Object tupleS : atoms[smallerRelationIndex].getRelation().getElements()) {
-            String hash = "";
+            StringBuilder hash = new StringBuilder();
             for (Integer position : keysPositionsThatMustMatch[smallerRelationIndex]) {
-                hash += ((Tuple) tupleS).get(position).toString() + ".";
+                hash.append(((Tuple) tupleS).get(position).toString());
+                hash.append(".");
             }
-            List<Tuple> v = map.getOrDefault(hash, new ArrayList<>());
-            v.add((Tuple) tupleS);
-            map.put(hash, v);
+            List<Tuple> tuples = map.getOrDefault(hash.toString(), new ArrayList<>());
+            tuples.add((Tuple) tupleS);
+            map.put(hash.toString(), tuples);
         }
 
         List<Map<String, T>> results = new ArrayList<>();
 
-        return null;
+        for (Object tupleB : atoms[biggerRelationIndex].getRelation().getElements()) {
+            StringBuilder hash = new StringBuilder();
+            for (Integer position : keysPositionsThatMustMatch[biggerRelationIndex]) {
+                hash.append(((Tuple) tupleB).get(position).toString());
+                hash.append(".");
+            }
+
+            Map<String, T> partialResultBase = new HashMap<>();
+
+            for (String s : atoms[biggerRelationIndex].getVariables()) {
+                for (Object x : ((Tuple) tupleB).getElements()) {
+                    if (s == atoms[biggerRelationIndex].getVariables()[((Tuple) tupleB).getElements().indexOf(x)]) {
+                        partialResultBase.put(s, (T) x);
+                    }
+                }
+            }
+
+            List<Tuple> tuples = map.get(hash.toString());
+
+            if (tuples != null && !tuples.isEmpty()) {
+
+                for (Tuple tuple : tuples) {
+
+                    Map<String, T> partialResult = new HashMap<>(partialResultBase);
+
+                    for (int i = 0; i < atoms[smallerRelationIndex].getVariables().length; i++) {
+                        partialResult.put(
+                                atoms[smallerRelationIndex].getVariables()[i],
+                                (T) tuple.get(i)
+                        );
+                    }
+
+                    if (partialResult.size() == requredSize) {
+                        results.add(partialResult);
+                    }
+
+                }
+
+            }
+        }
+
+        return results;
     }
 }
