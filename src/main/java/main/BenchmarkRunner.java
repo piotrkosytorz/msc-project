@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 public class BenchmarkRunner {
 
-    @Param({"10", "50", "150" , "200", "250", "300", "350", "400" /*, "450", "500", "600", "700", "800", "900", "1000" */})
+    @Param({"10", "50", "150" , "200", "250", "300", "350", "400" , "450", "500", "600", "700", "800", "900", "1000" })
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -74,7 +74,7 @@ public class BenchmarkRunner {
 //    }
 
     @Benchmark
-    public void nesed_loop_join2(Blackhole bh) throws Exception {
+    public void nested_loop_join2(Blackhole bh) throws Exception {
 
         // bootstrap
         query.bootstrap(new JoinPlanNestedLoopQueryResolver());
@@ -85,7 +85,7 @@ public class BenchmarkRunner {
     }
 
     @Benchmark
-    public void hash_hoin(Blackhole bh) throws Exception {
+    public void hash_join(Blackhole bh) throws Exception {
 
         // bootstrap
         query.bootstrap(new HashJoinQueryResolver());
