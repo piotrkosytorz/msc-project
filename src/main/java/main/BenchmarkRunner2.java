@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 public class BenchmarkRunner2 {
 
-    @Param({"10", "10000", "10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
+    @Param({"10", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000" /* ,"30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000" */})
     private int N;
 
     String localDir = System.getProperty("user.dir");
