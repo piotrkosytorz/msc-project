@@ -3,6 +3,7 @@ package main;
 import algorithms.joinplan.hashjoin.HashJoinQueryResolver;
 import algorithms.joinplan.nestedloop.JoinPlanNestedLoopQueryResolver;
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
+import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
 import managers.DataManager;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -62,16 +63,16 @@ public class BenchmarkRunner {
         bh.consume(res);
     }
 
-//    @Benchmark
-//    public void nesed_loop_join(Blackhole bh) throws Exception {
-//
-//        // bootstrap
-//        query.bootstrap(new IterativeNestedLoopJoinQueryResolver());
-//        // resolve
-//        List<Map<String, Integer>> res = query.resolve();
-//
-//        bh.consume(res);
-//    }
+    @Benchmark
+    public void nested_loop_join(Blackhole bh) throws Exception {
+
+        // bootstrap
+        query.bootstrap(new IterativeNestedLoopJoinQueryResolver());
+        // resolve
+        List<Map<String, Integer>> res = query.resolve();
+
+        bh.consume(res);
+    }
 
     @Benchmark
     public void nested_loop_join2(Blackhole bh) throws Exception {
