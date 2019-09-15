@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @Warmup(iterations = 1)
 @Measurement(iterations = 2)
-public class BenchmarkRunner2 {
+public class BenchmarkIndexing {
 
-    @Param({"10", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000" ,"30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
+    @Param({"10", "50", "150", "200", "250", "300", "350", "400", "450", "500", "1000", "10000", "10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -34,6 +34,7 @@ public class BenchmarkRunner2 {
     Relation<Integer> relC;
 
     Query<Integer> query;
+    Query<Integer> query2;
 
     public static void main(String[] args) throws IOException, RunnerException {
         org.openjdk.jmh.Main.main(args);
@@ -50,10 +51,28 @@ public class BenchmarkRunner2 {
                 new Atom<>(relB, "b", "c"),
                 new Atom<>(relC, "a", "c")
         );
+        query2 = new Query<>(
+                new Atom<>(relA.clone(), "a", "b"),
+                new Atom<>(relB.clone(), "b", "c"),
+                new Atom<>(relC.clone(), "a", "c")
+        );
+
+    }
+
+
+    @Benchmark
+    public void LFTJ_indexing(Blackhole bh) throws Exception {
+
+        // bootstrap
+        query2.bootstrap(new HashJoinQueryResolver());
+        // resolve
+//        List<Map<String, Integer>> res = query.resolve();
+
+//        bh.consume(res);
     }
 
     @Benchmark
-    public void leapFrogTrieJoin(Blackhole bh) throws Exception {
+    public void LFTJ(Blackhole bh) throws Exception {
 
         // bootstrap
         query.bootstrap(new LeapFrogTrieJoinQueryResolver());
@@ -63,14 +82,4 @@ public class BenchmarkRunner2 {
         bh.consume(res);
     }
 
-    @Benchmark
-    public void hash_join(Blackhole bh) throws Exception {
-
-        // bootstrap
-        query.bootstrap(new HashJoinQueryResolver());
-        // resolve
-        List<Map<String, Integer>> res = query.resolve();
-
-        bh.consume(res);
-    }
 }

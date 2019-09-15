@@ -1,7 +1,7 @@
 package main;
 
-import algorithms.joinplan.hashjoin.HashJoinQueryResolver;
-import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
+import algorithms.joinplan.nestedloop.JoinPlanNestedLoopQueryResolver;
+import algorithms.nestedloop.IterativeNestedLoopJoinQueryResolver;
 import managers.DataManager;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @Warmup(iterations = 1)
 @Measurement(iterations = 2)
-public class BenchmarkRunner2 {
+public class BenchmarkRunner4 {
 
-    @Param({"10", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000" ,"30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
+    @Param({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -52,11 +52,22 @@ public class BenchmarkRunner2 {
         );
     }
 
+//    @Benchmark
+//    public void LFTJ_join(Blackhole bh) throws Exception {
+//
+//        // bootstrap
+//        query.bootstrap(new LeapFrogTrieJoinQueryResolver());
+//        // resolve
+//        List<Map<String, Integer>> res = query.resolve();
+//
+//        bh.consume(res);
+//    }
+
     @Benchmark
-    public void leapFrogTrieJoin(Blackhole bh) throws Exception {
+    public void nested_loop_join(Blackhole bh) throws Exception {
 
         // bootstrap
-        query.bootstrap(new LeapFrogTrieJoinQueryResolver());
+        query.bootstrap(new IterativeNestedLoopJoinQueryResolver());
         // resolve
         List<Map<String, Integer>> res = query.resolve();
 
@@ -64,13 +75,24 @@ public class BenchmarkRunner2 {
     }
 
     @Benchmark
-    public void hash_join(Blackhole bh) throws Exception {
+    public void nested_loop_join2(Blackhole bh) throws Exception {
 
         // bootstrap
-        query.bootstrap(new HashJoinQueryResolver());
+        query.bootstrap(new JoinPlanNestedLoopQueryResolver());
         // resolve
         List<Map<String, Integer>> res = query.resolve();
 
         bh.consume(res);
     }
+
+//    @Benchmark
+//    public void hash_join(Blackhole bh) throws Exception {
+//
+//        // bootstrap
+//        query.bootstrap(new HashJoinQueryResolver());
+//        // resolve
+//        List<Map<String, Integer>> res = query.resolve();
+//
+//        bh.consume(res);
+//    }
 }
