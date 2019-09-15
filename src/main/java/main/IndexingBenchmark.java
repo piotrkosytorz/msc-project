@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 1)
+@Warmup(iterations = 1)
+@Measurement(iterations = 2)
 public class IndexingBenchmark {
 
     @Param({"10", "50", "150", "200", "250", "300", "350", "400", "450", "500", "1000", "10000", "10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})

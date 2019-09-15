@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 1)
+@Warmup(iterations = 1)
+@Measurement(iterations = 2)
 public class BenchmarkRunner2 {
 
     @Param({"10", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000" /* ,"30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000" */})
