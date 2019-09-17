@@ -11,6 +11,7 @@ import query.Query;
 import query.Relation;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -19,11 +20,11 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 1)
-@Warmup(iterations = 1)
-@Measurement(iterations = 2)
-public class BenchmarkRunner2 {
+@Warmup(iterations = 0)
+@Measurement(iterations = 5)
+public class BenchmarkLFTJvsHashJoin {
 
-    @Param({"10", "100", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000"})
+    @Param({"1", "250", "500", "750", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000"})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -42,6 +43,9 @@ public class BenchmarkRunner2 {
     @Setup
     public void setup() throws Exception {
         List<String[]> dataArray = DataManager.importFromFile(path).subList(0, N);
+
+        Collections.shuffle(dataArray);
+
         relA = DataManager.convertToIntegerRelation(dataArray);
         relB = relA.clone();
         relC = relA.clone();
