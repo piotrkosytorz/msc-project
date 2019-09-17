@@ -30,13 +30,16 @@ public class NaiveJoinPlan<T> {
                     // join the two and replace them by the query that has been returned
                     List<Map<String, T>> partialResult = algorithm.executeJoin(new Query(atoms.get(0), atoms.get(i)));
 
-                    atoms.remove(atoms.get(i));
-                    atoms.remove(atoms.get(0));
+                    if (!partialResult.isEmpty()) {
+                        atoms.remove(atoms.get(i));
+                        atoms.remove(atoms.get(0));
 
-                    atoms.add(this.resultToAtom(partialResult));
+                        atoms.add(this.resultToAtom(partialResult));
 
-                    query = new Query(atoms.toArray(new Atom[0]));
-
+                        query = new Query(atoms.toArray(new Atom[0]));
+                    } else {
+                        return null;
+                    }
                 }
             }
         }

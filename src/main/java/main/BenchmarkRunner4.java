@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 2)
 public class BenchmarkRunner4 {
 
-    @Param({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"})
+    @Param({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"/*, "20", "30", "40", "50", "60", "70", "80", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000" */})
     private int N;
 
     String localDir = System.getProperty("user.dir");
@@ -63,7 +63,7 @@ public class BenchmarkRunner4 {
 //        bh.consume(res);
 //    }
 
-    @Benchmark
+//    @Benchmark
     public void nested_loop_join(Blackhole bh) throws Exception {
 
         // bootstrap

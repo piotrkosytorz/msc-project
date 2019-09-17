@@ -1,6 +1,5 @@
 package main;
 
-import algorithms.joinplan.hashjoin.HashJoinQueryResolver;
 import algorithms.lftj.LeapFrogTrieJoinQueryResolver;
 import managers.DataManager;
 import org.openjdk.jmh.annotations.*;
@@ -12,15 +11,14 @@ import query.Relation;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 1)
-@Warmup(iterations = 1)
-@Measurement(iterations = 2)
+@Warmup(iterations = 0)
+@Measurement(iterations = 1)
 public class BenchmarkIndexing {
 
     @Param({"10", "50", "150", "200", "250", "300", "350", "400", "450", "500", "1000", "10000", "10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"})
@@ -46,6 +44,7 @@ public class BenchmarkIndexing {
         relA = DataManager.convertToIntegerRelation(dataArray);
         relB = relA.clone();
         relC = relA.clone();
+
         query = new Query<>(
                 new Atom<>(relA, "a", "b"),
                 new Atom<>(relB, "b", "c"),
@@ -62,24 +61,19 @@ public class BenchmarkIndexing {
 
     @Benchmark
     public void LFTJ_indexing(Blackhole bh) throws Exception {
-
         // bootstrap
-        query2.bootstrap(new HashJoinQueryResolver());
-        // resolve
+        query2.bootstrap(new LeapFrogTrieJoinQueryResolver());
+    }
+
+//    @Benchmark
+//    public void LFTJ(Blackhole bh) throws Exception {
+//
+//        // bootstrap
+//        query.bootstrap(new LeapFrogTrieJoinQueryResolver());
+//        // resolve
 //        List<Map<String, Integer>> res = query.resolve();
-
+//
 //        bh.consume(res);
-    }
-
-    @Benchmark
-    public void LFTJ(Blackhole bh) throws Exception {
-
-        // bootstrap
-        query.bootstrap(new LeapFrogTrieJoinQueryResolver());
-        // resolve
-        List<Map<String, Integer>> res = query.resolve();
-
-        bh.consume(res);
-    }
+//    }
 
 }
