@@ -11,7 +11,6 @@ import query.Query;
 import query.Relation;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -44,7 +43,7 @@ public class BenchmarkLFTJvsHashJoin {
     public void setup() throws Exception {
         List<String[]> dataArray = DataManager.importFromFile(path).subList(0, N);
 
-        Collections.shuffle(dataArray);
+//        Collections.shuffle(dataArray);
 
         relA = DataManager.convertToIntegerRelation(dataArray);
         relB = relA.clone();
